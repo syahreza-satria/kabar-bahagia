@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KabarBahagia
 
-## Getting Started
+Layanan undangan pernikahan digital (Fase 1 · MVP). Acuan produk ada di [CONTEXT.md](CONTEXT.md).
 
-First, run the development server:
+## Menjalankan
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. `npm install`
+2. Salin `.env.example` ke `.env.local` dan isi nilainya.
+3. Di Supabase: buat bucket Storage **publik** bernama `media` (atau sesuai `SUPABASE_MEDIA_BUCKET`).
+4. Terapkan skema database: `npx drizzle-kit migrate` (migrasi ada di `db/migrations`).
+5. Buat akun admin: tambahkan pengguna di Supabase Auth (email + sandi), lalu daftarkan emailnya di tabel `admins`:
+   `insert into admins (email, nama, role) values ('email@anda.com', 'Nama Anda', 'superadmin');`
+6. `npm run dev`, buka `/login`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Struktur singkat
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `app/[slug]` undangan publik (cache + tag per slug), `app/r/[token]` rekap klien, `app/admin` panel admin.
+- `themes/` tema (satu folder per tema, registri di `themes/registry.ts`); `components/invitation/` komponen interaktif bersama.
+- `app/api/cron/expire` arsip otomatis (cron Vercel di `vercel.json`, wajib `CRON_SECRET`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Catatan
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Rate limit publik berada di memori per instance; ganti dengan penyimpanan terpusat bila trafik besar.
+- Turnstile aktif hanya bila `NEXT_PUBLIC_TURNSTILE_SITE_KEY` dan `TURNSTILE_SECRET_KEY` diisi.
+- Backup harian database diatur di Supabase (bukan di kode ini).

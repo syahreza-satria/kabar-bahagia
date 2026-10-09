@@ -3,6 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Variabel tema undangan (di-override per tema / per undangan) */
+  --inv-bg: #faf7f2;
+  --inv-surface: #ffffff;
+  --inv-ink: #2b2a28;
+  --inv-muted: #78736b;
+  --inv-primary: #8a6f4d;
+  --inv-line: #e6dfd3;
 }
 
 @theme inline {
@@ -10,17 +18,121 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-inv-bg: var(--inv-bg);
+  --color-inv-surface: var(--inv-surface);
+  --color-inv-ink: var(--inv-ink);
+  --color-inv-muted: var(--inv-muted);
+  --color-inv-primary: var(--inv-primary);
+  --color-inv-line: var(--inv-line);
+  --font-display: var(--font-inv-display), serif;
+  --font-body: var(--font-inv-body), sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Area sentuh minimal 44px untuk kontrol undangan */
+.inv-btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0 1.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+.inv-btn-solid {
+  background: var(--inv-primary);
+  color: #fff;
+}
+.inv-btn-outline {
+  border: 1px solid var(--inv-primary);
+  color: var(--inv-primary);
+}
+.inv-btn:hover {
+  opacity: 0.85;
+}
+.inv-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.inv-input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--inv-line);
+  border-radius: 0.5rem;
+  background: var(--inv-surface);
+  padding: 0.5rem 0.75rem;
+  color: var(--inv-ink);
+  font-size: 1rem;
+}
+.inv-input:focus-visible {
+  outline: 2px solid var(--inv-primary);
+  outline-offset: 1px;
+}
+
+/* Kelas bantu panel admin */
+.adm-input {
+  width: 100%;
+  border: 1px solid #d4d4d8;
+  border-radius: 0.375rem;
+  background: #fff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+.adm-input:focus-visible {
+  outline: 2px solid #18181b;
+  outline-offset: 1px;
+}
+.adm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  background: #18181b;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #fff;
+}
+.adm-btn:hover {
+  background: #3f3f46;
+}
+.adm-btn:disabled {
+  opacity: 0.5;
+}
+.adm-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #d4d4d8;
+  border-radius: 0.375rem;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+.adm-btn-ghost:hover {
+  background: #f4f4f5;
+}
+.adm-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #52525b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
