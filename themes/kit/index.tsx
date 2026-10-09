@@ -7,6 +7,8 @@ import { GiftCards } from "@/components/invitation/GiftCards";
 import { ParallaxBand } from "@/components/invitation/ParallaxBand";
 import { Reveal, type RevealVariant } from "@/components/invitation/Reveal";
 import { RsvpForm } from "@/components/invitation/RsvpForm";
+import { SectionScene } from "@/components/invitation/SectionScene";
+import type { SceneKind } from "@/components/invitation/scenes/types";
 import { Tilt } from "@/components/invitation/Tilt";
 import { WishesBoard } from "@/components/invitation/WishesBoard";
 import { googleCalendarUrl, icsDataUrl } from "@/lib/calendar";
@@ -26,6 +28,11 @@ export type ThemeKit = {
   motion?: "slide" | "rise" | "zoom" | "flip" | "rotate" | "drop";
   /** Tata letak galeri (default "grid"). */
   gallery?: GalleryVariant;
+  /**
+   * Adegan Three.js di dalam section: latar countdown, objek 3D yang bisa diseret di penutup
+   * (showcase), dan latar penutup. null = nonaktif.
+   */
+  scenes?: { countdown?: SceneKind | null; showcase?: SceneKind | null; closing?: SceneKind | null };
 };
 
 const MOTION: Record<NonNullable<ThemeKit["motion"]>, [RevealVariant, RevealVariant]> = {
@@ -55,6 +62,9 @@ export function createSections(
 ): Record<SectionCode, ComponentType<SectionProps>> {
   const { Section } = kit;
   const [motionA, motionB] = MOTION[kit.motion ?? "slide"];
+  const sceneCountdown = kit.scenes?.countdown ?? null;
+  const sceneShowcase = kit.scenes?.showcase === undefined ? "heart" : kit.scenes.showcase;
+  const sceneClosing = kit.scenes?.closing === undefined ? "fireworks" : kit.scenes.closing;
 
   function Person({ p, label, side }: { p: InvitationContent["bride"]; label: string; side: RevealVariant }) {
     const handle = p.instagram.replace(/^@/, "");
@@ -122,7 +132,12 @@ export function createSections(
     if (!main) return null;
     return (
       <Section title="Menuju Hari Bahagia">
-        <Countdown targetIso={main.startsAt} />
+        <div className="relative overflow-hidden rounded-[var(--inv-radius,0.5rem)] py-8">
+          {sceneCountdown && <SectionScene kind={sceneCountdown} />}
+          <div className="relative">
+            <Countdown targetIso={main.startsAt} />
+          </div>
+        </div>
       </Section>
     );
   };
@@ -242,13 +257,26 @@ export function createSections(
     const { closing, bride, groom } = data.content;
     return (
       <Section eyebrow="Terima kasih">
-        {closing.message && <p className="whitespace-pre-line leading-relaxed text-inv-ink">{closing.message}</p>}
-        <p className="mt-8 text-sm text-inv-muted">Kami yang berbahagia,</p>
-        <p className="inv-shimmer mt-1 font-display text-5xl">
-          {groom.nickname} &amp; {bride.nickname}
-        </p>
-        {closing.family && <p className="mt-4 whitespace-pre-line text-sm text-inv-muted">{closing.family}</p>}
-        <p className="mt-12 text-[11px] uppercase tracking-widest text-inv-muted">Dibuat dengan KabarBahagia</p>
+        {sceneShowcase && (
+          <div className="relative mb-2 h-64">
+            <SectionScene kind={sceneShowcase} interactive />
+            <p className="pointer-events-none absolute inset-x-0 bottom-0 text-[11px] uppercase tracking-widest text-inv-muted">
+              Seret untuk memutar ↻
+            </p>
+          </div>
+        )}
+        <div className="relative overflow-hidden rounded-[var(--inv-radius,0.5rem)] py-8">
+          {sceneClosing && <SectionScene kind={sceneClosing} />}
+          <div className="relative">
+            {closing.message && <p className="whitespace-pre-line leading-relaxed text-inv-ink">{closing.message}</p>}
+            <p className="mt-8 text-sm text-inv-muted">Kami yang berbahagia,</p>
+            <p className="inv-shimmer mt-1 font-display text-5xl">
+              {groom.nickname} &amp; {bride.nickname}
+            </p>
+            {closing.family && <p className="mt-4 whitespace-pre-line text-sm text-inv-muted">{closing.family}</p>}
+            <p className="mt-12 text-[11px] uppercase tracking-widest text-inv-muted">Dibuat dengan KabarBahagia</p>
+          </div>
+        </div>
       </Section>
     );
   };

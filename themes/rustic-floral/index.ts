@@ -6,5 +6,5 @@ import { Section } from "./ui";
 
 export const rusticFloral: ThemeDefinition = {
   config,
-  sections: createSections({ Section, Cover, photoShape: "oval" }),
+  sections: createSections({ Section, Cover, photoShape: "oval", scenes: { countdown: "butterflies", showcase: "heart" } }),
 };

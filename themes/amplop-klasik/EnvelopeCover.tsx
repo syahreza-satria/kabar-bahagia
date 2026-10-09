@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { CoverScene } from "@/components/invitation/CoverScene";
 import { useShellOpen } from "@/components/invitation/InvitationShell";
 
 /**
@@ -35,7 +36,8 @@ export function EnvelopeCover({
 
   return (
     <div className="relative flex min-h-dvh flex-col items-center justify-center bg-inv-bg px-6 py-10 text-center">
-      <p className="mb-8 text-xs uppercase tracking-[0.35em] text-inv-muted">Anda diundang</p>
+      <CoverScene kind="hearts" />
+      <p className="relative mb-8 text-xs uppercase tracking-[0.35em] text-inv-muted">Anda diundang</p>
 
       <div className="relative w-full max-w-[320px]" style={{ perspective: 1100 }}>
         {/* surat */}

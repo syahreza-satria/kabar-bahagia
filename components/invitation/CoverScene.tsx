@@ -2,7 +2,7 @@
 
 import { useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
-import type { SceneKind } from "./Scene3D";
+import type { SceneKind } from "./scenes/types";
 
 const Scene3D = dynamic(() => import("./Scene3D"), { ssr: false });
 
@@ -12,7 +12,7 @@ export function CoverScene({ kind }: { kind: SceneKind }) {
   if (reduce) return null;
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-      <Scene3D kind={kind} />
+      <Scene3D kind={kind} mode="cover" />
     </div>
   );
 }

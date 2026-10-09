@@ -10,7 +10,7 @@ export function Cover({ data, guestSlot }: SectionProps) {
   const main = data.events[0];
   return (
     <div className="relative flex min-h-dvh flex-col items-center overflow-hidden px-6 pb-12 pt-14 text-center">
-      <CoverScene kind="petals" />
+      <CoverScene kind="butterflies" />
       <p className="relative z-10 text-xs uppercase tracking-[0.35em] text-inv-muted">Kami Menikah</p>
 
       <div className="relative z-10 mt-6 h-72 w-56 overflow-hidden rounded-t-full border-4 border-inv-primary/70 bg-inv-line p-1.5 shadow-xl">

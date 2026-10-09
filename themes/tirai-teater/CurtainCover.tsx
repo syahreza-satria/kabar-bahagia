@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { CoverScene } from "@/components/invitation/CoverScene";
 import { useShellOpen } from "@/components/invitation/InvitationShell";
 
 const VELVET =
@@ -43,6 +44,7 @@ export function CurtainCover({
         animate={{ opacity: opened ? 1 : 0.25 }}
         transition={{ duration: 1.8 }}
       />
+      <CoverScene kind="fireworks" />
       <div className="relative z-0 flex min-h-dvh flex-col items-center justify-center px-6 text-center">
         <p className="text-[11px] uppercase tracking-[0.5em] text-inv-primary">The Wedding of</p>
         <h1 className="mt-4 font-script text-7xl leading-[0.95] text-inv-ink">

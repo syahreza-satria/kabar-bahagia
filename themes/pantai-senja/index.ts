@@ -6,5 +6,5 @@ import { Section } from "./ui";
 
 export const pantaiSenja: ThemeDefinition = {
   config,
-  sections: createSections({ Section, Cover, photoShape: "circle", motion: "rise", gallery: "masonry" }),
+  sections: createSections({ Section, Cover, photoShape: "circle", motion: "rise", gallery: "masonry", scenes: { countdown: "bubbles", showcase: "heart" } }),
 };

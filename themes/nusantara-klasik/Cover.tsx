@@ -1,3 +1,4 @@
+import { CoverScene } from "@/components/invitation/CoverScene";
 import { OpenButton } from "@/components/invitation/InvitationShell";
 import { SplitText } from "@/components/invitation/SplitText";
 import { formatDateLong } from "@/lib/utils";
@@ -10,6 +11,7 @@ export function Cover({ data, guestSlot }: SectionProps) {
   return (
     <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-[#4a1219] px-6 py-16 text-center text-[#f6e3b4]">
       <div aria-hidden className="inv-batik absolute inset-0 opacity-60" />
+      <CoverScene kind="lanterns" />
       <div aria-hidden className="absolute inset-4 border-2 border-[#d4a84a]/70" />
       <div aria-hidden className="absolute inset-6 border border-[#d4a84a]/40" />
 

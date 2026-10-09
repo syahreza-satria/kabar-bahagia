@@ -16,7 +16,7 @@ export function Cover({ data, guestSlot }: SectionProps) {
           <div className="absolute inset-0 bg-gradient-to-b from-inv-bg/70 via-inv-bg/60 to-inv-bg" />
         </>
       )}
-      <CoverScene kind="stars" />
+      <CoverScene kind="galaxy" />
       <div className="pointer-events-none absolute inset-5 border border-inv-primary/50" aria-hidden />
       <div className="pointer-events-none absolute inset-7 border border-inv-primary/20" aria-hidden />
 
