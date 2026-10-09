@@ -20,12 +20,15 @@ export async function mountScene(
   kind: SceneKind,
   mode: SceneMode,
   interactive: boolean,
+  isCancelled: () => boolean = () => false,
 ): Promise<(() => void) | null> {
   const T = await import("three");
+  if (isCancelled()) return null; // pemasangan usang (mis. StrictMode): jangan buat renderer
 
   let renderer: InstanceType<typeof T.WebGLRenderer>;
   try {
-    renderer = new T.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer = new T.WebGLRenderer({ canvas, alpha: true, antialias: true, premultipliedAlpha: true });
+    renderer.setClearColor(0x000000, 0);
   } catch {
     return null; // WebGL tidak tersedia: tampilan tetap utuh tanpa 3D
   }
@@ -46,6 +49,10 @@ export async function mountScene(
   if (env) {
     // peta lingkungan studio: tanpa ini material logam terlihat hitam
     const { RoomEnvironment } = await import("three/examples/jsm/environments/RoomEnvironment.js");
+    if (isCancelled()) {
+      renderer.dispose();
+      return null;
+    }
     const pmrem = new T.PMREMGenerator(renderer);
     const tex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
     scene.environment = tex;

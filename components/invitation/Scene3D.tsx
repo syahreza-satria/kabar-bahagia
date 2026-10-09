@@ -9,6 +9,10 @@ export type { SceneKind, SceneMode };
 /**
  * Adegan Three.js (cincin, hati, galaksi, lampion, kembang api, kupu-kupu, dll.).
  * Three.js dimuat dinamis supaya tidak memperlambat render awal.
+ *
+ * Setiap pemasangan membuat elemen <canvas> baru: konteks WebGL yang sudah dilepas
+ * (forceContextLoss) tidak bisa dipakai ulang, dan React StrictMode (mode dev) memasang
+ * komponen dua kali pada elemen yang sama.
  */
 export default function Scene3D({
   kind,
@@ -20,28 +24,33 @@ export default function Scene3D({
   /** true: kanvas menerima seretan untuk memutar objek */
   interactive?: boolean;
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const host = hostRef.current;
+    if (!host) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("aria-hidden", "true");
+    canvas.className = `absolute inset-0 h-full w-full ${interactive ? "cursor-grab touch-pan-y active:cursor-grabbing" : ""}`;
+    canvas.style.background = "transparent";
+    host.appendChild(canvas);
+
     let cancelled = false;
     let dispose: (() => void) | null = null;
-    mountScene(canvas, kind, mode, interactive).then((d) => {
-      if (cancelled) d?.();
-      else dispose = d;
-    });
+    mountScene(canvas, kind, mode, interactive, () => cancelled)
+      .then((d) => {
+        if (cancelled) d?.();
+        else dispose = d;
+      })
+      .catch((err) => console.warn("[Scene3D] gagal memuat adegan 3D:", err));
+
     return () => {
       cancelled = true;
       dispose?.();
+      canvas.remove();
     };
   }, [kind, mode, interactive]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden
-      className={`absolute inset-0 h-full w-full ${interactive ? "cursor-grab touch-pan-y active:cursor-grabbing" : ""}`}
-    />
-  );
+  return <div ref={hostRef} aria-hidden className="absolute inset-0" />;
 }

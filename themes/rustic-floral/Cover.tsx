@@ -15,7 +15,7 @@ export function Cover({ data, guestSlot }: SectionProps) {
 
       <div className="relative z-10 mt-6 h-72 w-56 overflow-hidden rounded-t-full border-4 border-inv-primary/70 bg-inv-line p-1.5 shadow-xl">
         <div className="relative h-full w-full overflow-hidden rounded-t-full">
-          {coverImageUrl && <Image src={coverImageUrl} alt="" fill priority sizes="224px" className="inv-kenburns object-cover" />}
+          {coverImageUrl && <Image src={coverImageUrl} alt="" fill loading="eager" sizes="224px" className="inv-kenburns object-cover" />}
         </div>
       </div>
 

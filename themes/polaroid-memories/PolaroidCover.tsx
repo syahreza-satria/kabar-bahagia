@@ -51,7 +51,7 @@ export function PolaroidCover({
           >
             <span aria-hidden className="absolute -top-2 left-1/2 h-4 w-14 -translate-x-1/2 rotate-3 bg-inv-primary/35" />
             <span className="relative block aspect-square overflow-hidden bg-inv-line">
-              <Image src={c.src} alt="" fill sizes="150px" priority={i === 0} className="pointer-events-none object-cover" draggable={false} />
+              <Image src={c.src} alt="" fill sizes="150px" loading={i === 0 ? "eager" : "lazy"} className="pointer-events-none object-cover" draggable={false} />
             </span>
             <span className="absolute inset-x-0 bottom-1 font-display text-lg leading-none text-neutral-600">{c.caption}</span>
           </motion.div>
