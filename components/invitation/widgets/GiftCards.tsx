@@ -47,7 +47,9 @@ export function GiftCards({ gifts }: { gifts: GiftData[] }) {
             </div>
           )}
           {g.number && (
-            <p className={`mt-3 ${g.type === "alamat" ? "whitespace-pre-line text-sm" : "font-display text-2xl tracking-wider"} text-inv-ink`}>
+            <p
+              className={`mt-3 ${g.type === "alamat" ? "whitespace-pre-line text-sm" : "font-display text-2xl tracking-wider"} text-inv-ink`}
+            >
               {g.number}
             </p>
           )}

@@ -3,8 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { DEMO_SLUG } from "@/lib/demo";
-import { Confetti } from "./Confetti";
-import { TurnstileWidget } from "./TurnstileWidget";
+import { Confetti } from "@/components/invitation/effects/Confetti";
+import { TurnstileWidget } from "@/components/invitation/widgets/TurnstileWidget";
 
 type Status = "hadir" | "tidak" | "ragu";
 type Lookup = {

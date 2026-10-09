@@ -1,18 +1,19 @@
 import Image from "next/image";
 import type { ComponentType, ReactNode } from "react";
 import { Suspense } from "react";
-import { Countdown } from "@/components/invitation/Countdown";
-import { Gallery, type GalleryVariant } from "@/components/invitation/Gallery";
-import { GiftCards } from "@/components/invitation/GiftCards";
-import { ParallaxBand } from "@/components/invitation/ParallaxBand";
-import { Reveal, type RevealVariant } from "@/components/invitation/Reveal";
-import { RsvpForm } from "@/components/invitation/RsvpForm";
-import { SectionScene } from "@/components/invitation/SectionScene";
-import type { SceneKind } from "@/components/invitation/scenes/types";
-import { Tilt } from "@/components/invitation/Tilt";
-import { WishesBoard } from "@/components/invitation/WishesBoard";
+import { Countdown } from "@/components/invitation/widgets/Countdown";
+import { Gallery, type GalleryVariant } from "@/components/invitation/widgets/Gallery";
+import { GiftCards } from "@/components/invitation/widgets/GiftCards";
+import { ParallaxBand } from "@/components/invitation/effects/ParallaxBand";
+import { Reveal, type RevealVariant } from "@/components/invitation/effects/Reveal";
+import { RsvpForm } from "@/components/invitation/widgets/RsvpForm";
+import { SectionScene } from "@/components/invitation/scene/SectionScene";
+import type { SceneKind } from "@/components/invitation/scene/engine/types";
+import { Tilt } from "@/components/invitation/effects/Tilt";
+import { WishesBoard } from "@/components/invitation/widgets/WishesBoard";
 import { googleCalendarUrl, icsDataUrl } from "@/lib/calendar";
-import { formatDateLong, formatTime, youtubeId } from "@/lib/utils";
+import { formatDateLong, formatTime } from "@/lib/dates";
+import { youtubeId } from "@/lib/text";
 import type { InvitationContent, SectionCode } from "@/types/invitation";
 import type { SectionProps } from "../types";
 
@@ -73,7 +74,9 @@ export function createSections(
         {p.photoUrl && (
           <Tilt>
             <div className={`relative overflow-hidden border-2 border-inv-primary p-1 ${SHAPE[kit.photoShape]}`}>
-              <div className={`relative h-full w-full overflow-hidden ${kit.photoShape === "arch" ? "rounded-t-full" : kit.photoShape === "oval" ? "rounded-[50%]" : kit.photoShape === "circle" ? "rounded-full" : "rounded"}`}>
+              <div
+                className={`relative h-full w-full overflow-hidden ${kit.photoShape === "arch" ? "rounded-t-full" : kit.photoShape === "oval" ? "rounded-[50%]" : kit.photoShape === "circle" ? "rounded-full" : "rounded"}`}
+              >
                 <Image src={p.photoUrl} alt={p.fullName} fill sizes="200px" className="object-cover" loading="lazy" />
               </div>
             </div>
@@ -160,14 +163,29 @@ export function createSections(
                 {e.address && <p className="mt-1 whitespace-pre-line text-sm text-inv-muted">{e.address}</p>}
                 <div className="mt-5 flex flex-wrap justify-center gap-2">
                   {e.mapsUrl && (
-                    <a href={e.mapsUrl} target="_blank" rel="noopener noreferrer" className="inv-btn inv-btn-solid !text-xs">
+                    <a
+                      href={e.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inv-btn inv-btn-solid !text-xs"
+                    >
                       Google Maps
                     </a>
                   )}
-                  <a href={googleCalendarUrl(e, title)} target="_blank" rel="noopener noreferrer" className="inv-btn inv-btn-outline !text-xs">
+                  <a
+                    href={googleCalendarUrl(e, title)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inv-btn inv-btn-outline !text-xs"
+                  >
                     Google Kalender
                   </a>
-                  <a href={icsDataUrl(e, title)} download={`${e.name}.ics`} aria-label={`Simpan ${e.name} ke kalender di HP`} className="inv-btn inv-btn-outline !text-xs">
+                  <a
+                    href={icsDataUrl(e, title)}
+                    download={`${e.name}.ics`}
+                    aria-label={`Simpan ${e.name} ke kalender di HP`}
+                    className="inv-btn inv-btn-outline !text-xs"
+                  >
                     Kalender HP / iPhone
                   </a>
                 </div>
@@ -186,7 +204,13 @@ export function createSections(
       <Section title="Galeri">
         {yt && (
           <div className="mb-4 aspect-video overflow-hidden rounded-md">
-            <iframe src={`https://www.youtube-nocookie.com/embed/${yt}`} title="Video prewedding" loading="lazy" allowFullScreen className="h-full w-full" />
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${yt}`}
+              title="Video prewedding"
+              loading="lazy"
+              allowFullScreen
+              className="h-full w-full"
+            />
           </div>
         )}
         <Gallery photos={photos} variant={kit.gallery} />
@@ -243,7 +267,13 @@ export function createSections(
       <Section title="Live Streaming" eyebrow="Saksikan dari jauh">
         {yt && (
           <div className="mb-4 aspect-video overflow-hidden rounded-md">
-            <iframe src={`https://www.youtube-nocookie.com/embed/${yt}`} title="Siaran langsung" loading="lazy" allowFullScreen className="h-full w-full" />
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${yt}`}
+              title="Siaran langsung"
+              loading="lazy"
+              allowFullScreen
+              className="h-full w-full"
+            />
           </div>
         )}
         <a href={url} target="_blank" rel="noopener noreferrer" className="inv-btn inv-btn-outline">

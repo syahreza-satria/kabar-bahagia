@@ -33,17 +33,31 @@ export function demoInvitation(themeId: string): InvitationData {
       opening: {
         greeting: "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         text: "Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami.",
-        quote: "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri.",
+        quote:
+          "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri.",
         quoteSource: "QS. Ar-Rum: 21",
       },
       closing: {
-        message: "Merupakan kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
+        message:
+          "Merupakan kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
         family: "Keluarga Besar Bapak Hendra Pratama\n& Keluarga Besar Bapak Agus Santoso",
       },
       loveStory: [
-        { date: "Maret 2019", title: "Pertama Bertemu", text: "Kami bertemu di sebuah acara kampus dan langsung akrab lewat obrolan tentang kopi." },
-        { date: "Agustus 2022", title: "Lamaran", text: "Dimas datang bersama keluarga dan membawa cincin yang kini menjadi pengikat janji kami." },
-        { date: "Maret 2027", title: "Hari Bahagia", text: "Kami memulai perjalanan baru sebagai sepasang suami istri." },
+        {
+          date: "Maret 2019",
+          title: "Pertama Bertemu",
+          text: "Kami bertemu di sebuah acara kampus dan langsung akrab lewat obrolan tentang kopi.",
+        },
+        {
+          date: "Agustus 2022",
+          title: "Lamaran",
+          text: "Dimas datang bersama keluarga dan membawa cincin yang kini menjadi pengikat janji kami.",
+        },
+        {
+          date: "Maret 2027",
+          title: "Hari Bahagia",
+          text: "Kami memulai perjalanan baru sebagai sepasang suami istri.",
+        },
       ],
       youtubeUrl: "",
       liveStreamUrl: "",
@@ -80,7 +94,14 @@ export function demoInvitation(themeId: string): InvitationData {
     gifts: [
       { id: "g1", type: "bank", bankName: "BCA", number: "1234567890", accountName: "Dimas Aditya Pratama", qrUrl: "" },
       { id: "g2", type: "ewallet", bankName: "GoPay", number: "081234567890", accountName: "Rina Maharani", qrUrl: "" },
-      { id: "g3", type: "alamat", bankName: "", number: "Jl. Melati No. 12, Jakarta Selatan 12345", accountName: "Keluarga Rina", qrUrl: "" },
+      {
+        id: "g3",
+        type: "alamat",
+        bankName: "",
+        number: "Jl. Melati No. 12, Jakarta Selatan 12345",
+        accountName: "Keluarga Rina",
+        qrUrl: "",
+      },
     ],
   };
 }

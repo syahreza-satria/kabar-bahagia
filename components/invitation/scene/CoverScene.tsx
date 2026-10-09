@@ -2,9 +2,9 @@
 
 import { useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
-import type { SceneKind } from "./scenes/types";
+import type { SceneKind } from "@/components/invitation/scene/engine/types";
 
-const Scene3D = dynamic(() => import("./Scene3D"), { ssr: false });
+const Scene3D = dynamic(() => import("@/components/invitation/scene/Scene3D"), { ssr: false });
 
 /** Lapisan 3D di belakang konten cover. Tidak dirender bila pengguna memilih reduced motion. */
 export function CoverScene({ kind }: { kind: SceneKind }) {

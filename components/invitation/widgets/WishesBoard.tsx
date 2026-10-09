@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { DEMO_SLUG } from "@/lib/demo";
-import { TurnstileWidget } from "./TurnstileWidget";
+import { TurnstileWidget } from "@/components/invitation/widgets/TurnstileWidget";
 
 type Wish = { id: string; nama: string; pesan: string; createdAt: string };
 
@@ -21,8 +21,18 @@ export function WishesBoard({ slug }: { slug: string }) {
   const [wishes, setWishes] = useState<Wish[]>(() =>
     demo
       ? [
-          { id: "d1", nama: "Keluarga Besar", pesan: "Selamat menempuh hidup baru! Semoga sakinah, mawaddah, warahmah.", createdAt: new Date(Date.now() - 3_600_000).toISOString() },
-          { id: "d2", nama: "Sahabat Kuliah", pesan: "Akhirnya sah juga! Bahagia selalu ya kalian berdua.", createdAt: new Date(Date.now() - 86_400_000).toISOString() },
+          {
+            id: "d1",
+            nama: "Keluarga Besar",
+            pesan: "Selamat menempuh hidup baru! Semoga sakinah, mawaddah, warahmah.",
+            createdAt: new Date(Date.now() - 3_600_000).toISOString(),
+          },
+          {
+            id: "d2",
+            nama: "Sahabat Kuliah",
+            pesan: "Akhirnya sah juga! Bahagia selalu ya kalian berdua.",
+            createdAt: new Date(Date.now() - 86_400_000).toISOString(),
+          },
         ]
       : [],
   );
@@ -59,14 +69,23 @@ export function WishesBoard({ slug }: { slug: string }) {
     setError(null);
     try {
       if (demo) {
-        setWishes((w) => [{ id: `d${Date.now()}`, nama: nama || "Anda", pesan, createdAt: new Date().toISOString() }, ...w]);
+        setWishes((w) => [
+          { id: `d${Date.now()}`, nama: nama || "Anda", pesan, createdAt: new Date().toISOString() },
+          ...w,
+        ]);
         setPesan("");
         return;
       }
       const res = await fetch("/api/wishes", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ slug, to: code || undefined, nama: guestName ? undefined : nama, pesan, turnstile: token }),
+        body: JSON.stringify({
+          slug,
+          to: code || undefined,
+          nama: guestName ? undefined : nama,
+          pesan,
+          turnstile: token,
+        }),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error ?? "Gagal mengirim ucapan");
@@ -115,7 +134,9 @@ export function WishesBoard({ slug }: { slug: string }) {
       </form>
 
       <ul className="max-h-96 space-y-3 overflow-y-auto pr-1">
-        {wishes.length === 0 && <li className="text-center text-sm text-inv-muted">Jadilah yang pertama memberi ucapan.</li>}
+        {wishes.length === 0 && (
+          <li className="text-center text-sm text-inv-muted">Jadilah yang pertama memberi ucapan.</li>
+        )}
         {wishes.map((w) => (
           <li key={w.id} className="rounded-lg border border-inv-line bg-inv-surface p-4">
             <div className="flex items-baseline justify-between gap-2">

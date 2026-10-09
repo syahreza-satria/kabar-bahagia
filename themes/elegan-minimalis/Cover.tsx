@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { CoverScene } from "@/components/invitation/CoverScene";
-import { SplitText } from "@/components/invitation/SplitText";
-import { formatDateLong } from "@/lib/utils";
+import { CoverScene } from "@/components/invitation/scene/CoverScene";
+import { SplitText } from "@/components/invitation/effects/SplitText";
+import { formatDateLong } from "@/lib/dates";
 import { CoverFooter } from "../kit/CoverFooter";
 import type { SectionProps } from "../types";
 
@@ -26,7 +26,9 @@ export function Cover({ data, guestSlot }: SectionProps) {
           <span className="block text-3xl italic text-inv-primary">&amp;</span>
           <SplitText text={bride.nickname} className="block" delay={0.7} />
         </h1>
-        {main && <p className="mt-5 text-sm tracking-widest text-inv-muted">{formatDateLong(main.startsAt, main.timezone)}</p>}
+        {main && (
+          <p className="mt-5 text-sm tracking-widest text-inv-muted">{formatDateLong(main.startsAt, main.timezone)}</p>
+        )}
         <CoverFooter guestSlot={guestSlot} className="mt-10" />
       </div>
     </div>

@@ -1,10 +1,12 @@
 import { getAdmin } from "@/lib/auth";
-import { listRsvps, rsvpCsv } from "@/lib/rsvp";
+import { listRsvps } from "@/lib/rsvp";
+import { rsvpCsv } from "@/lib/rsvp-format";
+import { isUuid } from "@/lib/text";
 
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   if (!(await getAdmin())) return new Response("Tidak diizinkan", { status: 401 });
   const { id } = await ctx.params;
-  if (!/^[0-9a-f-]{36}$/.test(id)) return new Response("Not found", { status: 404 });
+  if (!isUuid(id)) return new Response("Not found", { status: 404 });
   const csv = rsvpCsv(await listRsvps(id));
   return new Response(csv, {
     headers: {

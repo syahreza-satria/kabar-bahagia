@@ -1,10 +1,10 @@
 import { Suspense, type CSSProperties } from "react";
-import { getGuestByCode } from "@/lib/data";
+import { findGuestByCode } from "@/lib/invitations";
 import { SECTION_LABELS } from "@/types/invitation";
 import { getTheme } from "@/themes/registry";
 import type { InvitationData, SectionCode } from "@/types/invitation";
 import { InvitationShell } from "./InvitationShell";
-import { ViewBeacon } from "./ViewBeacon";
+import { ViewBeacon } from "@/components/invitation/widgets/ViewBeacon";
 
 /** Section tanpa data tidak ditampilkan walau diaktifkan. */
 function hasContent(code: SectionCode, d: InvitationData) {
@@ -36,7 +36,7 @@ async function GuestName({
   if (invitationId === "demo") return <>Nama Tamu (demo)</>;
   const { to } = await searchParams;
   const code = typeof to === "string" ? to : "";
-  const guest = code ? await getGuestByCode(invitationId, code) : null;
+  const guest = code ? await findGuestByCode(invitationId, code) : null;
   return <>{guest?.nama ?? "Tamu Undangan"}</>;
 }
 

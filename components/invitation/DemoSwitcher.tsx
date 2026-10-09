@@ -7,7 +7,10 @@ import { useEffect, useRef, useState } from "react";
 export function DemoSwitcher({ themes, activeId }: { themes: { id: string; name: string }[]; activeId: string }) {
   const [menu, setMenu] = useState(false);
   const root = useRef<HTMLDivElement>(null);
-  const index = Math.max(0, themes.findIndex((t) => t.id === activeId));
+  const index = Math.max(
+    0,
+    themes.findIndex((t) => t.id === activeId),
+  );
   const prev = themes[(index - 1 + themes.length) % themes.length];
   const next = themes[(index + 1) % themes.length];
 
@@ -23,11 +26,15 @@ export function DemoSwitcher({ themes, activeId }: { themes: { id: string; name:
     };
   }, [menu]);
 
-  const arrow = "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg text-white/80 hover:bg-white/15 hover:text-white";
+  const arrow =
+    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg text-white/80 hover:bg-white/15 hover:text-white";
 
   return (
     <div ref={root} className="fixed left-1/2 top-2 z-[80] -translate-x-1/2 text-white">
-      <nav aria-label="Pilih tema demo" className="flex items-center gap-1 rounded-full bg-black/75 p-1 shadow-lg backdrop-blur">
+      <nav
+        aria-label="Pilih tema demo"
+        className="flex items-center gap-1 rounded-full bg-black/75 p-1 shadow-lg backdrop-blur"
+      >
         <Link href={`/preview/${prev.id}`} replace aria-label={`Tema sebelumnya: ${prev.name}`} className={arrow}>
           ‹
         </Link>
@@ -49,7 +56,11 @@ export function DemoSwitcher({ themes, activeId }: { themes: { id: string; name:
       </nav>
 
       {menu && (
-        <div role="listbox" aria-label="Daftar tema" className="mt-2 max-h-[70dvh] w-64 overflow-y-auto rounded-2xl bg-black/90 p-1.5 text-sm shadow-2xl backdrop-blur">
+        <div
+          role="listbox"
+          aria-label="Daftar tema"
+          className="mt-2 max-h-[70dvh] w-64 overflow-y-auto rounded-2xl bg-black/90 p-1.5 text-sm shadow-2xl backdrop-blur"
+        >
           <Link href="/demo" className="block rounded-xl px-3 py-2.5 text-white/70 hover:bg-white/10 hover:text-white">
             ← Semua tema
           </Link>
@@ -65,7 +76,9 @@ export function DemoSwitcher({ themes, activeId }: { themes: { id: string; name:
               className={`flex items-center justify-between rounded-xl px-3 py-2.5 ${t.id === activeId ? "bg-white text-black" : "text-white/85 hover:bg-white/10"}`}
             >
               <span>{t.name}</span>
-              <span className="text-xs opacity-60">{i + 1}/{themes.length}</span>
+              <span className="text-xs opacity-60">
+                {i + 1}/{themes.length}
+              </span>
             </Link>
           ))}
         </div>

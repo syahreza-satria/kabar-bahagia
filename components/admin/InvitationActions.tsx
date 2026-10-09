@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { deleteInvitation, duplicateInvitation, setInvitationStatus } from "@/app/admin/actions";
+import { deleteInvitation, duplicateInvitation, setInvitationStatus } from "@/app/admin/_actions/invitation";
 
 export function InvitationActions({ id, status }: { id: string; status: "draft" | "aktif" | "arsip" }) {
   const router = useRouter();
@@ -37,7 +37,9 @@ export function InvitationActions({ id, status }: { id: string; status: "draft" 
           disabled={pending}
           className="adm-btn-ghost !text-red-600"
           onClick={() => {
-            if (confirm("Hapus undangan beserta semua tamu, RSVP, ucapan, dan media? Tindakan ini tidak bisa dibatalkan.")) {
+            if (
+              confirm("Hapus undangan beserta semua tamu, RSVP, ucapan, dan media? Tindakan ini tidak bisa dibatalkan.")
+            ) {
               start(() => deleteInvitation(id));
             }
           }}

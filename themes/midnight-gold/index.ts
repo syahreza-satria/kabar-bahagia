@@ -6,5 +6,10 @@ import { Section } from "./ui";
 
 export const midnightGold: ThemeDefinition = {
   config,
-  sections: createSections({ Section, Cover, photoShape: "square", scenes: { countdown: "galaxy", showcase: "galaxy", closing: "fireworks" } }),
+  sections: createSections({
+    Section,
+    Cover,
+    photoShape: "square",
+    scenes: { countdown: "galaxy", showcase: "galaxy", closing: "fireworks" },
+  }),
 };

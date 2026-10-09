@@ -73,7 +73,9 @@ export function FileUploadField({
           onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])}
         />
       </div>
-      {!invitationId && <p className="mt-1 text-xs text-zinc-500">Simpan dulu sebagai draft untuk mengaktifkan unggah.</p>}
+      {!invitationId && (
+        <p className="mt-1 text-xs text-zinc-500">Simpan dulu sebagai draft untuk mengaktifkan unggah.</p>
+      )}
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </div>
   );

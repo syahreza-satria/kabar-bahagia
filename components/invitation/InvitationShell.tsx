@@ -2,8 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { Ambient, type AmbientKind } from "./Ambient";
-import { ScrollFx } from "./ScrollFx";
+import { Ambient, type AmbientKind } from "@/components/invitation/effects/Ambient";
+import { ScrollFx } from "@/components/invitation/effects/ScrollFx";
 
 type ShellContext = { open: () => void };
 const Ctx = createContext<ShellContext>({ open: () => {} });
@@ -37,7 +37,12 @@ export function OpenButton({ children, className }: { children: ReactNode; class
 export type NavItem = { code: string; label: string };
 
 /** Label ringkas supaya dock muat di layar sempit. */
-const SHORT_LABEL: Record<string, string> = { lovestory: "Cerita", amplop: "Amplop", live: "Live", mempelai: "Mempelai" };
+const SHORT_LABEL: Record<string, string> = {
+  lovestory: "Cerita",
+  amplop: "Amplop",
+  live: "Live",
+  mempelai: "Mempelai",
+};
 
 /** Progress bar tipis di atas layar yang mengikuti scroll. */
 function ScrollProgress() {
@@ -92,14 +97,20 @@ function SectionDock({ items }: { items: NavItem[] }) {
           key={i.code}
           data-code={i.code}
           type="button"
-          onClick={() => document.getElementById(`sec-${i.code}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+          onClick={() =>
+            document.getElementById(`sec-${i.code}`)?.scrollIntoView({ behavior: "smooth", block: "start" })
+          }
           aria-current={active === i.code ? "true" : undefined}
           className={`relative min-h-11 shrink-0 rounded-full px-3.5 text-xs transition-colors ${
             active === i.code ? "text-inv-on-primary" : "text-inv-muted hover:text-inv-ink"
           }`}
         >
           {active === i.code && (
-            <motion.span layoutId="dock-pill" className="absolute inset-0 rounded-full bg-inv-primary" transition={{ type: "spring", stiffness: 300, damping: 28 }} />
+            <motion.span
+              layoutId="dock-pill"
+              className="absolute inset-0 rounded-full bg-inv-primary"
+              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+            />
           )}
           <span className="relative">{SHORT_LABEL[i.code] ?? i.label}</span>
         </button>
@@ -153,7 +164,9 @@ export function InvitationShell({
     const a = audioRef.current;
     if (!a) return;
     if (a.paused) {
-      a.play().then(() => setPlaying(true)).catch(() => {});
+      a.play()
+        .then(() => setPlaying(true))
+        .catch(() => {});
     } else {
       a.pause();
       setPlaying(false);

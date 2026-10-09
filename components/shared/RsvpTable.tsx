@@ -1,4 +1,4 @@
-import { statusLabel, summarize } from "@/lib/rsvp";
+import { statusLabel, summarize } from "@/lib/rsvp-format";
 
 type Row = { nama: string; status: "hadir" | "tidak" | "ragu"; jumlah: number; grup: string | null };
 

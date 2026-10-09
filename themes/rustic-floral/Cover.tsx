@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { CoverScene } from "@/components/invitation/CoverScene";
-import { SplitText } from "@/components/invitation/SplitText";
-import { formatDateLong } from "@/lib/utils";
+import { CoverScene } from "@/components/invitation/scene/CoverScene";
+import { SplitText } from "@/components/invitation/effects/SplitText";
+import { formatDateLong } from "@/lib/dates";
 import { CoverFooter } from "../kit/CoverFooter";
 import type { SectionProps } from "../types";
 
@@ -15,14 +15,27 @@ export function Cover({ data, guestSlot }: SectionProps) {
 
       <div className="relative z-10 mt-6 h-72 w-56 overflow-hidden rounded-t-full border-4 border-inv-primary/70 bg-inv-line p-1.5 shadow-xl">
         <div className="relative h-full w-full overflow-hidden rounded-t-full">
-          {coverImageUrl && <Image src={coverImageUrl} alt="" fill loading="eager" sizes="224px" className="inv-kenburns object-cover" />}
+          {coverImageUrl && (
+            <Image
+              src={coverImageUrl}
+              alt=""
+              fill
+              loading="eager"
+              sizes="224px"
+              className="inv-kenburns object-cover"
+            />
+          )}
         </div>
       </div>
 
       <h1 className="relative z-10 mt-6 font-script text-6xl leading-none text-inv-primary">
         <SplitText text={`${groom.nickname} & ${bride.nickname}`} />
       </h1>
-      {main && <p className="relative z-10 mt-3 text-sm tracking-widest text-inv-muted">{formatDateLong(main.startsAt, main.timezone)}</p>}
+      {main && (
+        <p className="relative z-10 mt-3 text-sm tracking-widest text-inv-muted">
+          {formatDateLong(main.startsAt, main.timezone)}
+        </p>
+      )}
       <CoverFooter guestSlot={guestSlot} className="relative z-10 mt-8" />
     </div>
   );

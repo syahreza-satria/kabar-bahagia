@@ -59,8 +59,18 @@ export function GuestLinks({
       </details>
 
       <div className="flex flex-wrap gap-2">
-        <input placeholder="Cari nama tamu" value={q} onChange={(e) => setQ(e.target.value)} className="adm-input !w-56" />
-        <select value={group} onChange={(e) => setGroup(e.target.value)} className="adm-input !w-44" aria-label="Filter grup">
+        <input
+          placeholder="Cari nama tamu"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          className="adm-input !w-56"
+        />
+        <select
+          value={group}
+          onChange={(e) => setGroup(e.target.value)}
+          className="adm-input !w-44"
+          aria-label="Filter grup"
+        >
           <option value="">Semua grup</option>
           {groups.map((g) => (
             <option key={g}>{g}</option>
@@ -100,7 +110,11 @@ export function GuestLinks({
                   </td>
                   <td className="px-3 py-3 text-zinc-600">{g.grup || "-"}</td>
                   <td className="px-3 py-3 text-xs">
-                    {g.sentAt ? <span className="text-emerald-700">Terkirim</span> : <span className="text-zinc-500">Belum</span>}
+                    {g.sentAt ? (
+                      <span className="text-emerald-700">Terkirim</span>
+                    ) : (
+                      <span className="text-zinc-500">Belum</span>
+                    )}
                     {g.openedAt && <span className="ml-2 text-sky-700">Dibuka</span>}
                   </td>
                   <td className="px-3 py-3">
@@ -117,7 +131,9 @@ export function GuestLinks({
                       <button
                         type="button"
                         className="adm-btn-ghost"
-                        onClick={() => navigator.clipboard?.writeText(link).catch(() => window.prompt("Salin link:", link))}
+                        onClick={() =>
+                          navigator.clipboard?.writeText(link).catch(() => window.prompt("Salin link:", link))
+                        }
                       >
                         Salin link
                       </button>

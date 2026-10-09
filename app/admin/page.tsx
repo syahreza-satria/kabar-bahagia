@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { getDb, schema } from "@/db";
-import { formatDateShort } from "@/lib/utils";
+import { formatDateShort } from "@/lib/dates";
 
 const STATUS = ["draft", "aktif", "arsip"] as const;
 const BADGE: Record<string, string> = {
@@ -98,7 +98,9 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
                   </Link>
                 </td>
                 <td className="px-4 py-3 text-zinc-600">/{r.slug}</td>
-                <td className="px-4 py-3 text-zinc-600">{r.eventAt ? formatDateShort(new Date(r.eventAt).toISOString()) : "-"}</td>
+                <td className="px-4 py-3 text-zinc-600">
+                  {r.eventAt ? formatDateShort(new Date(r.eventAt).toISOString()) : "-"}
+                </td>
                 <td className="px-4 py-3 text-zinc-600">{r.guests}</td>
                 <td className="px-4 py-3">
                   <span className={`rounded-full px-2 py-0.5 text-xs ${BADGE[r.status]}`}>{r.status}</span>

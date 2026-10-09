@@ -28,7 +28,9 @@ async function Demo({ params, searchParams }: Pick<PageProps<"/preview/[themeId]
 
 export default function PreviewPage(props: PageProps<"/preview/[themeId]">) {
   return (
-    <Suspense fallback={<div className="flex min-h-dvh items-center justify-center text-sm text-neutral-500">Memuat demo…</div>}>
+    <Suspense
+      fallback={<div className="flex min-h-dvh items-center justify-center text-sm text-neutral-500">Memuat demo…</div>}
+    >
       <Demo params={props.params} searchParams={props.searchParams} />
     </Suspense>
   );

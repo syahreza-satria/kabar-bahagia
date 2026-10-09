@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { mountScene } from "./scenes/runtime";
-import type { SceneKind, SceneMode } from "./scenes/types";
+import { mountScene } from "@/components/invitation/scene/engine/runtime";
+import type { SceneKind, SceneMode } from "@/components/invitation/scene/engine/types";
 
 export type { SceneKind, SceneMode };
 

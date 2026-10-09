@@ -1,17 +1,13 @@
-import { eq } from "drizzle-orm";
-import { notFound } from "next/navigation";
 import { InvitationNav } from "@/components/admin/InvitationNav";
 import { InvitationForm, type FormState } from "@/components/admin/InvitationForm";
-import { getDb, schema } from "@/db";
+import { getInvitationOrNotFound } from "@/lib/invitations";
 import { loadInvitationParts } from "@/lib/data";
-import { isoToLocalInput } from "@/lib/utils";
+import { isoToLocalInput } from "@/lib/dates";
 import { themeList } from "@/themes/registry";
 
 export default async function EditInvitationPage({ params }: PageProps<"/admin/[id]/edit">) {
   const { id } = await params;
-  if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
-  const [row] = await getDb().select().from(schema.invitations).where(eq(schema.invitations.id, id)).limit(1);
-  if (!row) notFound();
+  const row = await getInvitationOrNotFound(id);
   const data = await loadInvitationParts(row);
 
   const initial: FormState = {

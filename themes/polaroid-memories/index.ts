@@ -6,5 +6,12 @@ import { Section } from "./ui";
 
 export const polaroidMemories: ThemeDefinition = {
   config,
-  sections: createSections({ Section, Cover, photoShape: "square", motion: "rotate", gallery: "polaroid", scenes: { showcase: "heart" } }),
+  sections: createSections({
+    Section,
+    Cover,
+    photoShape: "square",
+    motion: "rotate",
+    gallery: "polaroid",
+    scenes: { showcase: "heart" },
+  }),
 };

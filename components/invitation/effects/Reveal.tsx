@@ -56,16 +56,3 @@ export function Reveal({
     </motion.div>
   );
 }
-
-/** Anak-anaknya muncul berurutan. */
-export function Stagger({ children, className, step = 0.12 }: { children: ReactNode[]; className?: string; step?: number }) {
-  return (
-    <div className={className}>
-      {children.map((c, i) => (
-        <Reveal key={i} delay={i * step}>
-          {c}
-        </Reveal>
-      ))}
-    </div>
-  );
-}

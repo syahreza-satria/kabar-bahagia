@@ -1,6 +1,6 @@
-import { CoverScene } from "@/components/invitation/CoverScene";
-import { SplitText } from "@/components/invitation/SplitText";
-import { formatDateLong } from "@/lib/utils";
+import { CoverScene } from "@/components/invitation/scene/CoverScene";
+import { SplitText } from "@/components/invitation/effects/SplitText";
+import { formatDateLong } from "@/lib/dates";
 import { CoverFooter } from "../kit/CoverFooter";
 import type { SectionProps } from "../types";
 import { RedSun } from "./RedSun";
@@ -25,7 +25,11 @@ export function Cover({ data, guestSlot }: SectionProps) {
       </div>
 
       <div className="relative z-10 text-center">
-        {main && <p className="mb-6 text-xs uppercase tracking-[0.35em] text-inv-muted">{formatDateLong(main.startsAt, main.timezone)}</p>}
+        {main && (
+          <p className="mb-6 text-xs uppercase tracking-[0.35em] text-inv-muted">
+            {formatDateLong(main.startsAt, main.timezone)}
+          </p>
+        )}
         <CoverFooter guestSlot={guestSlot} />
       </div>
     </div>

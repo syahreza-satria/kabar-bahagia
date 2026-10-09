@@ -1,4 +1,4 @@
-import { formatDateLong } from "@/lib/utils";
+import { formatDateLong } from "@/lib/dates";
 import type { SectionProps } from "../types";
 import { CurtainCover } from "./CurtainCover";
 

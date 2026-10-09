@@ -20,6 +20,4 @@ export const config: ThemeConfig = {
   coverExit: "zoom",
   radius: "1.75rem",
   ambient: "bubbles",
-  animation: { reveal: true },
-  defaultSections: ["cover", "pembuka", "mempelai", "countdown", "acara", "galeri", "rsvp", "ucapan", "amplop", "penutup"],
 };

@@ -19,6 +19,4 @@ export const config: ThemeConfig = {
   coverExit: "slideUp",
   radius: "1.25rem",
   ambient: "petals",
-  animation: { reveal: true },
-  defaultSections: ["cover", "pembuka", "mempelai", "countdown", "acara", "galeri", "rsvp", "ucapan", "amplop", "penutup"],
 };

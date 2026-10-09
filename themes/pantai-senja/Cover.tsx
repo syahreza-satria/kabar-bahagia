@@ -1,7 +1,7 @@
-import { CoverScene } from "@/components/invitation/CoverScene";
-import { SplitText } from "@/components/invitation/SplitText";
-import { SunRise } from "@/components/invitation/SunRise";
-import { formatDateLong } from "@/lib/utils";
+import { CoverScene } from "@/components/invitation/scene/CoverScene";
+import { SplitText } from "@/components/invitation/effects/SplitText";
+import { SunRise } from "./SunRise";
+import { formatDateLong } from "@/lib/dates";
 import { CoverFooter } from "../kit/CoverFooter";
 import type { SectionProps } from "../types";
 
@@ -10,7 +10,12 @@ const WAVE = "M0 40 C 150 0, 350 80, 600 40 S 1050 0, 1200 40 L1200 120 L0 120 Z
 function Wave({ color, duration, className }: { color: string; duration: string; className: string }) {
   return (
     <div aria-hidden className={`absolute inset-x-0 h-24 overflow-hidden ${className}`}>
-      <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="inv-wave h-full w-[200%] max-w-none" style={{ animationDuration: duration }}>
+      <svg
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+        className="inv-wave h-full w-[200%] max-w-none"
+        style={{ animationDuration: duration }}
+      >
         <path d={WAVE} fill={color} />
         <path d={WAVE} fill={color} transform="translate(1200 0)" />
       </svg>
@@ -37,7 +42,9 @@ export function Cover({ data, guestSlot }: SectionProps) {
             <span className="block text-3xl">&amp;</span>
             <SplitText text={bride.nickname} className="block" delay={0.7} />
           </h1>
-          {main && <p className="mt-4 text-sm tracking-widest text-white/95">{formatDateLong(main.startsAt, main.timezone)}</p>}
+          {main && (
+            <p className="mt-4 text-sm tracking-widest text-white/95">{formatDateLong(main.startsAt, main.timezone)}</p>
+          )}
         </div>
         <Wave color="rgba(255,255,255,0.25)" duration="12s" className="bottom-12" />
         <Wave color="rgba(255,246,233,0.6)" duration="8s" className="bottom-6" />

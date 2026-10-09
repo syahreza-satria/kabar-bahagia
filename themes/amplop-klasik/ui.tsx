@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/invitation/Reveal";
+import { Reveal } from "@/components/invitation/effects/Reveal";
 import type { SectionWrapperProps } from "../kit";
 
 /** Setiap section tampil seperti lembar surat di atas kertas. */

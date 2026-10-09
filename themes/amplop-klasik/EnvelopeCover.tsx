@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { CoverScene } from "@/components/invitation/CoverScene";
+import { CoverScene } from "@/components/invitation/scene/CoverScene";
 import { useShellOpen } from "@/components/invitation/InvitationShell";
 
 /**
@@ -31,7 +31,10 @@ export function EnvelopeCover({
     if (stage) return;
     if (reduce) return open();
     setStage(1);
-    timers.current.push(setTimeout(() => setStage(2), 900), setTimeout(open, 2400));
+    timers.current.push(
+      setTimeout(() => setStage(2), 900),
+      setTimeout(open, 2400),
+    );
   }
 
   return (
@@ -67,7 +70,11 @@ export function EnvelopeCover({
           {/* tutup amplop */}
           <motion.div
             className="absolute inset-x-0 top-0 h-[58%] origin-top bg-inv-primary"
-            style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)", filter: "brightness(0.95)", backfaceVisibility: "visible" }}
+            style={{
+              clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+              filter: "brightness(0.95)",
+              backfaceVisibility: "visible",
+            }}
             animate={{ rotateX: stage >= 1 ? 180 : 0, zIndex: stage >= 1 ? 5 : 30 }}
             transition={{ duration: 0.8, ease: "easeInOut", zIndex: { delay: stage >= 1 ? 0.35 : 0 } }}
           />

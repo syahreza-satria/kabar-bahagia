@@ -1,14 +1,22 @@
-import { Reveal } from "@/components/invitation/Reveal";
+import { Reveal } from "@/components/invitation/effects/Reveal";
 import type { SectionWrapperProps } from "../kit";
 import { config } from "./config";
 
 export function Section({ title, eyebrow, children }: SectionWrapperProps) {
   return (
     <section className="relative overflow-hidden px-6 py-16 text-center">
-      <span data-fx="drift" aria-hidden className="pointer-events-none absolute -left-8 top-4 select-none text-9xl text-inv-primary opacity-[0.08]">
+      <span
+        data-fx="drift"
+        aria-hidden
+        className="pointer-events-none absolute -left-8 top-4 select-none text-9xl text-inv-primary opacity-[0.08]"
+      >
         {config.ornaments.divider}
       </span>
-      <span data-fx="parallax" aria-hidden className="pointer-events-none absolute -right-6 bottom-6 select-none text-8xl text-inv-primary opacity-[0.08]">
+      <span
+        data-fx="parallax"
+        aria-hidden
+        className="pointer-events-none absolute -right-6 bottom-6 select-none text-8xl text-inv-primary opacity-[0.08]"
+      >
         ✿
       </span>
       <div className="relative">

@@ -37,11 +37,23 @@ export function Gallery({ photos, variant = "grid" }: { photos: MediaData[]; var
               whileTap={{ scale: 0.97 }}
               className="relative bg-white p-2 pb-8 text-left shadow-lg"
             >
-              <span aria-hidden className="absolute -top-2 left-1/2 h-4 w-12 -translate-x-1/2 rotate-2 bg-inv-primary/30" />
+              <span
+                aria-hidden
+                className="absolute -top-2 left-1/2 h-4 w-12 -translate-x-1/2 rotate-2 bg-inv-primary/30"
+              />
               <span className="relative block aspect-square overflow-hidden bg-inv-line">
-                <Image src={p.url} alt={`Foto galeri ${i + 1}`} fill sizes="200px" className="object-cover" loading="lazy" />
+                <Image
+                  src={p.url}
+                  alt={`Foto galeri ${i + 1}`}
+                  fill
+                  sizes="200px"
+                  className="object-cover"
+                  loading="lazy"
+                />
               </span>
-              <span className="absolute inset-x-0 bottom-1.5 text-center font-display text-sm text-neutral-600">#{i + 1}</span>
+              <span className="absolute inset-x-0 bottom-1.5 text-center font-display text-sm text-neutral-600">
+                #{i + 1}
+              </span>
             </motion.button>
           ))}
         </div>
@@ -57,7 +69,14 @@ export function Gallery({ photos, variant = "grid" }: { photos: MediaData[]; var
               aria-label={`Perbesar foto ${i + 1}`}
               className="relative aspect-[3/4] w-[70%] shrink-0 snap-center overflow-hidden rounded-[var(--inv-radius,0.5rem)] bg-inv-line"
             >
-              <Image src={p.url} alt={`Foto galeri ${i + 1}`} fill sizes="340px" className="object-cover" loading="lazy" />
+              <Image
+                src={p.url}
+                alt={`Foto galeri ${i + 1}`}
+                fill
+                sizes="340px"
+                className="object-cover"
+                loading="lazy"
+              />
             </button>
           ))}
         </div>
@@ -73,33 +92,40 @@ export function Gallery({ photos, variant = "grid" }: { photos: MediaData[]; var
               aria-label={`Perbesar foto ${i + 1}`}
               className={`relative mb-2 block w-full overflow-hidden rounded-[var(--inv-radius,0.5rem)] bg-inv-line ${i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-square" : "aspect-[4/5]"}`}
             >
-              <Image src={p.url} alt={`Foto galeri ${i + 1}`} fill sizes="240px" className="object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
+              <Image
+                src={p.url}
+                alt={`Foto galeri ${i + 1}`}
+                fill
+                sizes="240px"
+                className="object-cover transition-transform duration-500 hover:scale-105"
+                loading="lazy"
+              />
             </button>
           ))}
         </div>
       )}
 
       {variant === "grid" && (
-      <div className="grid grid-cols-2 gap-2">
-        {photos.map((p, i) => (
-          <button
-            key={p.id}
-            type="button"
-            onClick={() => setIndex(i)}
-            aria-label={`Perbesar foto ${i + 1}`}
-            className={`relative overflow-hidden rounded-md bg-inv-line ${i % 5 === 0 ? "col-span-2 aspect-[16/10]" : "aspect-square"}`}
-          >
-            <Image
-              src={p.url}
-              alt={`Foto galeri ${i + 1}`}
-              fill
-              sizes="(max-width: 480px) 50vw, 240px"
-              className="object-cover transition-transform duration-500 hover:scale-105"
-              loading="lazy"
-            />
-          </button>
-        ))}
-      </div>
+        <div className="grid grid-cols-2 gap-2">
+          {photos.map((p, i) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Perbesar foto ${i + 1}`}
+              className={`relative overflow-hidden rounded-md bg-inv-line ${i % 5 === 0 ? "col-span-2 aspect-[16/10]" : "aspect-square"}`}
+            >
+              <Image
+                src={p.url}
+                alt={`Foto galeri ${i + 1}`}
+                fill
+                sizes="(max-width: 480px) 50vw, 240px"
+                className="object-cover transition-transform duration-500 hover:scale-105"
+                loading="lazy"
+              />
+            </button>
+          ))}
+        </div>
       )}
 
       {index !== null && (
@@ -158,9 +184,17 @@ export function Gallery({ photos, variant = "grid" }: { photos: MediaData[]; var
               else if (info.offset.x > 80) setIndex((index - 1 + photos.length) % photos.length);
             }}
           >
-            <Image src={photos[index].url} alt={`Foto galeri ${index + 1}`} fill sizes="92vw" className="pointer-events-none object-contain" />
+            <Image
+              src={photos[index].url}
+              alt={`Foto galeri ${index + 1}`}
+              fill
+              sizes="92vw"
+              className="pointer-events-none object-contain"
+            />
           </motion.div>
-          <p className="absolute bottom-4 text-xs text-white/70">Geser untuk berpindah foto · {index + 1}/{photos.length}</p>
+          <p className="absolute bottom-4 text-xs text-white/70">
+            Geser untuk berpindah foto · {index + 1}/{photos.length}
+          </p>
         </div>
       )}
     </>

@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { CoverScene } from "@/components/invitation/CoverScene";
-import { SplitText } from "@/components/invitation/SplitText";
-import { formatDateLong } from "@/lib/utils";
+import { CoverScene } from "@/components/invitation/scene/CoverScene";
+import { SplitText } from "@/components/invitation/effects/SplitText";
+import { formatDateLong } from "@/lib/dates";
 import { CoverFooter } from "../kit/CoverFooter";
 import type { SectionProps } from "../types";
 
@@ -12,7 +12,14 @@ export function Cover({ data, guestSlot }: SectionProps) {
     <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 py-16 text-center">
       {coverImageUrl && (
         <>
-          <Image src={coverImageUrl} alt="" fill loading="eager" sizes="480px" className="inv-kenburns object-cover opacity-50" />
+          <Image
+            src={coverImageUrl}
+            alt=""
+            fill
+            loading="eager"
+            sizes="480px"
+            className="inv-kenburns object-cover opacity-50"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-inv-bg/70 via-inv-bg/60 to-inv-bg" />
         </>
       )}
@@ -27,7 +34,11 @@ export function Cover({ data, guestSlot }: SectionProps) {
           <span className="my-1 block text-2xl text-inv-primary">&amp;</span>
           <SplitText text={bride.nickname} className="block" delay={0.7} />
         </h1>
-        {main && <p className="mt-6 text-xs uppercase tracking-[0.3em] text-inv-muted">{formatDateLong(main.startsAt, main.timezone)}</p>}
+        {main && (
+          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-inv-muted">
+            {formatDateLong(main.startsAt, main.timezone)}
+          </p>
+        )}
         <CoverFooter guestSlot={guestSlot} className="mt-10" />
       </div>
     </div>

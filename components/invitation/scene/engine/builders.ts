@@ -1,14 +1,20 @@
-import type { Built, Ctx, SceneKind } from "./types";
+import type { Built, Ctx, SceneKind } from "@/components/invitation/scene/engine/types";
 
 const rnd = (a = 0, b = 1) => a + Math.random() * (b - a);
-const pick = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+const pick = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
 
 /** Warna percikan/kembang api; di latar terang dipilih yang lebih pekat agar terlihat. */
 export function palette(ctx: Ctx) {
   const { T, primary, light, dark } = ctx;
   return dark
     ? [primary, light, new T.Color("#ffd166"), new T.Color("#ff6b9a"), new T.Color("#6bd6ff")]
-    : [primary, primary.clone().lerp(new T.Color("#000"), 0.25), new T.Color("#e0a100"), new T.Color("#d6336c"), new T.Color("#1c8fd1")];
+    : [
+        primary,
+        primary.clone().lerp(new T.Color("#000"), 0.25),
+        new T.Color("#e0a100"),
+        new T.Color("#d6336c"),
+        new T.Color("#1c8fd1"),
+      ];
 }
 
 function heartGeometry(ctx: Ctx) {
@@ -21,7 +27,13 @@ function heartGeometry(ctx: Ctx) {
   s.bezierCurveTo(0.6, 0.77, 0.8, 0.55, 0.8, 0.35);
   s.bezierCurveTo(0.8, 0.35, 0.8, 0, 0.5, 0);
   s.bezierCurveTo(0.35, 0, 0.25, 0.25, 0.25, 0.25);
-  const g = new T.ExtrudeGeometry(s, { depth: 0.25, bevelEnabled: true, bevelSize: 0.06, bevelThickness: 0.06, bevelSegments: 3 });
+  const g = new T.ExtrudeGeometry(s, {
+    depth: 0.25,
+    bevelEnabled: true,
+    bevelSize: 0.06,
+    bevelThickness: 0.06,
+    bevelSegments: 3,
+  });
   g.center();
   return g;
 }
@@ -29,7 +41,15 @@ function heartGeometry(ctx: Ctx) {
 type Mode = "float" | "fall" | "rise";
 
 /** Sebaran objek melayang/jatuh/naik; mengembalikan fungsi update. */
-function floaters(ctx: Ctx, geo: unknown, mats: unknown[], count: number, mode: Mode, scale: [number, number], edge = false) {
+function floaters(
+  ctx: Ctx,
+  geo: unknown,
+  mats: unknown[],
+  count: number,
+  mode: Mode,
+  scale: [number, number],
+  edge = false,
+) {
   const { T, scene } = ctx;
   const items = Array.from({ length: count }, (_, i) => {
     const mesh = new T.Mesh(geo as never, mats[i % mats.length] as never);
@@ -87,7 +107,8 @@ function rings(ctx: Ctx): Built {
   if (ctx.mode === "section") group.scale.setScalar(1.5);
   return {
     update(t, dt, input) {
-      group.rotation.y += (input.x * 0.9 - group.rotation.y) * 0.05 * (ctx.mode === "cover" ? 1 : 0) + 0.006 + input.drag;
+      group.rotation.y +=
+        (input.x * 0.9 - group.rotation.y) * 0.05 * (ctx.mode === "cover" ? 1 : 0) + 0.006 + input.drag;
       group.rotation.x += ((ctx.mode === "cover" ? input.y * 0.4 : 0.5 + input.scroll * 0.8) - group.rotation.x) * 0.05;
       group.position.y = baseY + Math.sin(t * 0.9) * 0.25;
       dust(t, dt);
@@ -127,7 +148,17 @@ function simpleFloaters(ctx: Ctx, kind: "hearts" | "petals" | "stars" | "wire" |
     scale = [0.45, 1.05];
   } else {
     geo = new T.SphereGeometry(0.4, 24, 16);
-    mats = [new T.MeshPhysicalMaterial({ color: ctx.light, metalness: 0, roughness: 0.05, transmission: 0.9, thickness: 0.6, transparent: true, opacity: 0.55 })];
+    mats = [
+      new T.MeshPhysicalMaterial({
+        color: ctx.light,
+        metalness: 0,
+        roughness: 0.05,
+        transmission: 0.9,
+        thickness: 0.6,
+        transparent: true,
+        opacity: 0.55,
+      }),
+    ];
     count = ctx.q(26);
     mode = "rise";
   }
@@ -203,10 +234,27 @@ function lanterns(ctx: Ctx): Built {
   const glowTex = glowTexture(ctx);
   const items = Array.from({ length: ctx.q(14) }, () => {
     const g = new T.Group();
-    g.add(new T.Mesh(body, new T.MeshBasicMaterial({ color: pick([0xff9a3c, 0xffb454, 0xff7a45]), side: T.DoubleSide, transparent: true, opacity: 0.92 })));
+    g.add(
+      new T.Mesh(
+        body,
+        new T.MeshBasicMaterial({
+          color: pick([0xff9a3c, 0xffb454, 0xff7a45]),
+          side: T.DoubleSide,
+          transparent: true,
+          opacity: 0.92,
+        }),
+      ),
+    );
     g.add(new T.Mesh(flame, new T.MeshBasicMaterial({ color: 0xfff1a8 })));
     const glow = new T.Sprite(
-      new T.SpriteMaterial({ map: glowTex, color: 0xffa94d, transparent: true, depthWrite: false, blending: ctx.dark ? T.AdditiveBlending : T.NormalBlending, opacity: 0.8 }),
+      new T.SpriteMaterial({
+        map: glowTex,
+        color: 0xffa94d,
+        transparent: true,
+        depthWrite: false,
+        blending: ctx.dark ? T.AdditiveBlending : T.NormalBlending,
+        opacity: 0.8,
+      }),
     );
     glow.scale.setScalar(2.6);
     g.add(glow);
@@ -307,7 +355,12 @@ function butterflies(ctx: Ctx): Built {
   wingGeo.scale(0.85, 1, 1);
   const cols = [ctx.primary, ctx.light, new T.Color("#ffd166"), new T.Color("#ff9ec4"), new T.Color("#8fd3ff")];
   const items = Array.from({ length: ctx.q(9) }, (_, i) => {
-    const mat = new T.MeshBasicMaterial({ color: cols[i % cols.length], side: T.DoubleSide, transparent: true, opacity: 0.92 });
+    const mat = new T.MeshBasicMaterial({
+      color: cols[i % cols.length],
+      side: T.DoubleSide,
+      transparent: true,
+      opacity: 0.92,
+    });
     const g = new T.Group();
     const left = new T.Group();
     const right = new T.Group();
@@ -321,7 +374,22 @@ function butterflies(ctx: Ctx): Built {
     g.add(left, right, bodyMesh);
     g.scale.setScalar(rnd(0.32, 0.62));
     scene.add(g);
-    return { g, left, right, cx: (Math.random() < 0.5 ? -1 : 1) * rnd(0.5, 2.4), cy: rnd(-5, 6), rx: rnd(1.2, 2.6), ry: rnd(1.2, 3), a: rnd(0.2, 0.5), b: rnd(0.25, 0.6), ph: rnd(0, 10), flap: rnd(9, 14), z: rnd(-3, 1.5), px: 0, py: 0 };
+    return {
+      g,
+      left,
+      right,
+      cx: (Math.random() < 0.5 ? -1 : 1) * rnd(0.5, 2.4),
+      cy: rnd(-5, 6),
+      rx: rnd(1.2, 2.6),
+      ry: rnd(1.2, 3),
+      a: rnd(0.2, 0.5),
+      b: rnd(0.25, 0.6),
+      ph: rnd(0, 10),
+      flap: rnd(9, 14),
+      z: rnd(-3, 1.5),
+      px: 0,
+      py: 0,
+    };
   });
   return {
     update(t, _dt, input) {
@@ -346,7 +414,14 @@ function heart(ctx: Ctx): Built {
   const geo = heartGeometry(ctx);
   const main = new T.Mesh(
     geo,
-    new T.MeshPhysicalMaterial({ color: ctx.primary, metalness: 0.25, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.15, envMapIntensity: 1.2 }),
+    new T.MeshPhysicalMaterial({
+      color: ctx.primary,
+      metalness: 0.25,
+      roughness: 0.22,
+      clearcoat: 1,
+      clearcoatRoughness: 0.15,
+      envMapIntensity: 1.2,
+    }),
   );
   const baseScale = ctx.mode === "cover" ? 1.9 : 2.9;
   main.scale.setScalar(baseScale);
@@ -362,13 +437,18 @@ function heart(ctx: Ctx): Built {
   return {
     update(t, dt, input) {
       // detak ganda ala jantung
-      const beat = Math.pow(Math.max(0, Math.sin(t * 5.2)), 8) * 0.18 + Math.pow(Math.max(0, Math.sin(t * 5.2 - 0.9)), 8) * 0.1;
+      const beat =
+        Math.pow(Math.max(0, Math.sin(t * 5.2)), 8) * 0.18 + Math.pow(Math.max(0, Math.sin(t * 5.2 - 0.9)), 8) * 0.1;
       main.scale.setScalar(baseScale * (1 + beat));
       group.rotation.y += dt * 0.5 + input.drag + (ctx.mode === "cover" ? input.x * 0.01 : 0);
       group.rotation.x += ((ctx.mode === "cover" ? input.y * 0.3 : input.scroll * 0.6 - 0.2) - group.rotation.x) * 0.05;
       for (const s of small) {
         const a = t * s.sp + s.ph;
-        s.m.position.set(Math.cos(a) * s.r, Math.sin(a) * s.r * Math.sin(s.tilt) + group.position.y, Math.sin(a) * s.r * Math.cos(s.tilt));
+        s.m.position.set(
+          Math.cos(a) * s.r,
+          Math.sin(a) * s.r * Math.sin(s.tilt) + group.position.y,
+          Math.sin(a) * s.r * Math.cos(s.tilt),
+        );
         s.m.rotation.y += dt * 1.5;
       }
     },

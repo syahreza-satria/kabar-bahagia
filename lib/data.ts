@@ -1,4 +1,4 @@
-import { and, asc, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { getDb, schema } from "@/db";
 import type { InvitationData } from "@/types/invitation";
@@ -11,11 +11,7 @@ export async function loadInvitationParts(row: InvitationRow): Promise<Invitatio
   const db = getDb();
   const [events, media, gifts] = await Promise.all([
     db.select().from(schema.events).where(eq(schema.events.invitationId, row.id)).orderBy(asc(schema.events.mulai)),
-    db
-      .select()
-      .from(schema.media)
-      .where(eq(schema.media.invitationId, row.id))
-      .orderBy(asc(schema.media.urutan)),
+    db.select().from(schema.media).where(eq(schema.media.invitationId, row.id)).orderBy(asc(schema.media.urutan)),
     db.select().from(schema.giftAccounts).where(eq(schema.giftAccounts.invitationId, row.id)),
   ]);
 
@@ -66,19 +62,4 @@ export async function getInvitationBySlug(slug: string): Promise<InvitationData 
     return { ...data, status: "arsip", media: [] };
   }
   return data;
-}
-
-/** Nama tamu diambil dari database lewat kode, bukan dari teks di URL. */
-export async function getGuestByCode(invitationId: string, code: string) {
-  const [guest] = await getDb()
-    .select({
-      id: schema.guests.id,
-      nama: schema.guests.nama,
-      kode: schema.guests.kode,
-      maxPax: schema.guests.maxPax,
-    })
-    .from(schema.guests)
-    .where(and(eq(schema.guests.invitationId, invitationId), eq(schema.guests.kode, code)))
-    .limit(1);
-  return guest ?? null;
 }

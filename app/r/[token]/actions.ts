@@ -2,9 +2,11 @@
 
 import { and, eq } from "drizzle-orm";
 import { getDb, schema } from "@/db";
+import { isUuid } from "@/lib/text";
 
 /** Klien tidak login: otorisasi lewat client_token rahasia. */
 export async function markSentByToken(token: string, guestId: string, sent: boolean) {
+  if (!isUuid(guestId)) return;
   const db = getDb();
   const [inv] = await db
     .select({ id: schema.invitations.id })

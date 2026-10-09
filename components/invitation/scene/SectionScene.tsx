@@ -3,15 +3,23 @@
 import { useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import type { SceneKind } from "./scenes/types";
+import type { SceneKind } from "@/components/invitation/scene/engine/types";
 
-const Scene3D = dynamic(() => import("./Scene3D"), { ssr: false });
+const Scene3D = dynamic(() => import("@/components/invitation/scene/Scene3D"), { ssr: false });
 
 /**
  * Kanvas 3D di dalam satu section. Hanya dibuat saat section mendekati layar dan dilepas
  * saat menjauh, sehingga jumlah konteks WebGL aktif tetap kecil. Induk harus `relative`.
  */
-export function SectionScene({ kind, interactive = false, className = "" }: { kind: SceneKind; interactive?: boolean; className?: string }) {
+export function SectionScene({
+  kind,
+  interactive = false,
+  className = "",
+}: {
+  kind: SceneKind;
+  interactive?: boolean;
+  className?: string;
+}) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);

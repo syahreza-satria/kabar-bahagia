@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
-import { deleteMedia, reorderMedia } from "@/app/admin/actions";
+import { deleteMedia, reorderMedia } from "@/app/admin/_actions/media";
 
 type Item = { id: string; url: string };
 
@@ -40,7 +40,12 @@ export function MediaManager({ invitationId, initial }: { invitationId: string; 
 
   function persist(next: Item[]) {
     setItems(next);
-    start(() => reorderMedia(invitationId, next.map((i) => i.id)));
+    start(() =>
+      reorderMedia(
+        invitationId,
+        next.map((i) => i.id),
+      ),
+    );
   }
 
   function drop(to: number) {
@@ -67,8 +72,17 @@ export function MediaManager({ invitationId, initial }: { invitationId: string; 
         <button className="adm-btn" disabled={busy} onClick={() => input.current?.click()}>
           {busy ? "Mengunggah…" : "+ Unggah foto"}
         </button>
-        <input ref={input} type="file" accept="image/*" multiple hidden onChange={(e) => e.target.files && upload(e.target.files)} />
-        <p className="text-xs text-zinc-500">Foto otomatis diperkecil (maks 1600px) dan dikonversi ke WebP. Seret untuk mengurutkan.</p>
+        <input
+          ref={input}
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+          onChange={(e) => e.target.files && upload(e.target.files)}
+        />
+        <p className="text-xs text-zinc-500">
+          Foto otomatis diperkecil (maks 1600px) dan dikonversi ke WebP. Seret untuk mengurutkan.
+        </p>
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
 

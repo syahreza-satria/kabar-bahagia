@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { and, asc, desc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { RsvpTable } from "@/components/admin/RsvpTable";
-import { ClientGuestLinks } from "@/components/invitation/ClientGuestLinks";
+import { RsvpTable } from "@/components/shared/RsvpTable";
+import { ClientGuestLinks } from "@/components/shared/ClientGuestLinks";
 import { getDb, schema } from "@/db";
 import { listRsvps } from "@/lib/rsvp";
-import { appUrl } from "@/lib/utils";
+import { appUrl } from "@/lib/urls";
 
 export const metadata: Metadata = {
   title: "Rekap Undangan",

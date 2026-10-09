@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { requireAdmin } from "@/lib/auth";
 import { logout } from "../login/actions";
 
 async function AdminFrame({ children }: { children: React.ReactNode }) {
+  // sesi login bergantung pada waktu & cookie: hanya boleh dihitung saat ada permintaan
+  await connection();
   const admin = await requireAdmin();
   return (
     <>

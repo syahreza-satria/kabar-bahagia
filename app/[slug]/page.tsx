@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { InvitationView } from "@/components/invitation/InvitationView";
 import { getAdmin } from "@/lib/auth";
 import { getInvitationBySlug } from "@/lib/data";
-import { formatDateShort, RESERVED_SLUGS } from "@/lib/utils";
+import { formatDateShort } from "@/lib/dates";
+import { RESERVED_SLUGS } from "@/lib/text";
 
 export async function generateMetadata({ params }: PageProps<"/[slug]">): Promise<Metadata> {
   const { slug } = await params;
@@ -36,20 +38,22 @@ export async function generateMetadata({ params }: PageProps<"/[slug]">): Promis
 }
 
 function Splash() {
-  return <div className="flex min-h-dvh items-center justify-center bg-[#faf7f2] text-sm text-neutral-500">Memuat undangan…</div>;
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-[#faf7f2] text-sm text-neutral-500">
+      Memuat undangan…
+    </div>
+  );
 }
 
 /** Undangan draft hanya bisa dibuka admin. */
 async function DraftGate({ children }: { children: React.ReactNode }) {
+  await connection();
   const admin = await getAdmin();
   if (!admin) notFound();
   return <>{children}</>;
 }
 
-async function InvitationLoader({
-  params,
-  searchParams,
-}: Pick<PageProps<"/[slug]">, "params" | "searchParams">) {
+async function InvitationLoader({ params, searchParams }: Pick<PageProps<"/[slug]">, "params" | "searchParams">) {
   const { slug } = await params;
   if (RESERVED_SLUGS.has(slug)) notFound();
   const data = await getInvitationBySlug(slug);

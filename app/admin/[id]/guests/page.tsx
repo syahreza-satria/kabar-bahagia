@@ -1,17 +1,19 @@
 import { asc, eq } from "drizzle-orm";
-import { notFound } from "next/navigation";
 import { GuestManager } from "@/components/admin/GuestManager";
 import { InvitationNav } from "@/components/admin/InvitationNav";
 import { getDb, schema } from "@/db";
-import { appUrl } from "@/lib/utils";
+import { getInvitationOrNotFound } from "@/lib/invitations";
+import { appUrl } from "@/lib/urls";
 
 export default async function GuestsPage({ params }: PageProps<"/admin/[id]/guests">) {
   const { id } = await params;
-  if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
+  const inv = await getInvitationOrNotFound(id);
   const db = getDb();
-  const [inv] = await db.select().from(schema.invitations).where(eq(schema.invitations.id, id)).limit(1);
-  if (!inv) notFound();
-  const rows = await db.select().from(schema.guests).where(eq(schema.guests.invitationId, id)).orderBy(asc(schema.guests.nama));
+  const rows = await db
+    .select()
+    .from(schema.guests)
+    .where(eq(schema.guests.invitationId, id))
+    .orderBy(asc(schema.guests.nama));
 
   return (
     <>

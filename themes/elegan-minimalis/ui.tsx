@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/invitation/Reveal";
+import { Reveal } from "@/components/invitation/effects/Reveal";
 import type { SectionWrapperProps } from "../kit";
 import { config } from "./config";
 
@@ -15,7 +15,11 @@ export function Divider() {
 export function Section({ title, eyebrow, children }: SectionWrapperProps) {
   return (
     <section className="relative overflow-hidden px-6 py-16 text-center">
-      <span data-fx="parallax" aria-hidden className="pointer-events-none absolute right-2 top-6 select-none font-display text-9xl text-inv-primary opacity-[0.06]">
+      <span
+        data-fx="parallax"
+        aria-hidden
+        className="pointer-events-none absolute right-2 top-6 select-none font-display text-9xl text-inv-primary opacity-[0.06]"
+      >
         {config.ornaments.divider}
       </span>
       <div className="relative">

@@ -1,5 +1,5 @@
-import { buildScene, palette } from "./builders";
-import type { Ctx, SceneInput, SceneKind, SceneMode } from "./types";
+import { buildScene, palette } from "@/components/invitation/scene/engine/builders";
+import type { Ctx, SceneInput, SceneKind, SceneMode } from "@/components/invitation/scene/engine/types";
 
 const NEEDS_ENV: SceneKind[] = ["rings", "heart", "hearts", "bubbles", "stars", "petals"];
 
@@ -36,7 +36,9 @@ export async function mountScene(
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, low ? 1.5 : 2));
 
   const css = getComputedStyle(canvas);
-  const primary = new T.Color(css.getPropertyValue("--inv-scene").trim() || css.getPropertyValue("--inv-primary").trim() || "#c9a45c");
+  const primary = new T.Color(
+    css.getPropertyValue("--inv-scene").trim() || css.getPropertyValue("--inv-primary").trim() || "#c9a45c",
+  );
   const light = primary.clone().lerp(new T.Color("#ffffff"), 0.55);
   const dark = isDark(css.getPropertyValue("--inv-bg"));
 
@@ -119,7 +121,11 @@ export async function mountScene(
   const burstAt = (clientX: number, clientY: number) => {
     const r = canvas.getBoundingClientRect();
     if (!r.width || !r.height) return;
-    const ndc = new T.Vector3(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1, 0.5).unproject(camera);
+    const ndc = new T.Vector3(
+      ((clientX - r.left) / r.width) * 2 - 1,
+      -((clientY - r.top) / r.height) * 2 + 1,
+      0.5,
+    ).unproject(camera);
     const dir = ndc.sub(camera.position).normalize();
     const p = camera.position.clone().add(dir.multiplyScalar(-camera.position.z / dir.z));
     const b = sparks[sparkIdx++ % sparks.length];

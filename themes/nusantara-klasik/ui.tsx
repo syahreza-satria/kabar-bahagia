@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/invitation/Reveal";
+import { Reveal } from "@/components/invitation/effects/Reveal";
 import type { SectionWrapperProps } from "../kit";
 
 /** Latar motif batik tipis, judul dengan garis ganda dan wajik emas. */

@@ -1,10 +1,11 @@
 import { and, count, countDistinct, eq, isNotNull, sum } from "drizzle-orm";
-import { notFound } from "next/navigation";
 import { CopyButton } from "@/components/admin/CopyButton";
 import { InvitationActions } from "@/components/admin/InvitationActions";
 import { InvitationNav } from "@/components/admin/InvitationNav";
 import { getDb, schema } from "@/db";
-import { appUrl, clientLink, formatDateShort } from "@/lib/utils";
+import { getInvitationOrNotFound } from "@/lib/invitations";
+import { formatDateShort } from "@/lib/dates";
+import { appUrl, clientLink } from "@/lib/urls";
 
 function Stat({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -17,15 +18,19 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
 
 export default async function InvitationDashboard({ params }: PageProps<"/admin/[id]">) {
   const { id } = await params;
-  if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
+  const inv = await getInvitationOrNotFound(id);
   const db = getDb();
-  const [inv] = await db.select().from(schema.invitations).where(eq(schema.invitations.id, id)).limit(1);
-  if (!inv) notFound();
 
   const [[guests], [sent], [opened], [views], [hadir], [wishes], events] = await Promise.all([
     db.select({ n: count() }).from(schema.guests).where(eq(schema.guests.invitationId, id)),
-    db.select({ n: count() }).from(schema.guests).where(and(eq(schema.guests.invitationId, id), isNotNull(schema.guests.sentAt))),
-    db.select({ n: countDistinct(schema.pageViews.guestId) }).from(schema.pageViews).where(eq(schema.pageViews.invitationId, id)),
+    db
+      .select({ n: count() })
+      .from(schema.guests)
+      .where(and(eq(schema.guests.invitationId, id), isNotNull(schema.guests.sentAt))),
+    db
+      .select({ n: countDistinct(schema.pageViews.guestId) })
+      .from(schema.pageViews)
+      .where(eq(schema.pageViews.invitationId, id)),
     db.select({ n: count() }).from(schema.pageViews).where(eq(schema.pageViews.invitationId, id)),
     db
       .select({ n: sum(schema.rsvps.jumlah) })
@@ -80,7 +85,8 @@ export default async function InvitationDashboard({ params }: PageProps<"/admin/
               <CopyButton value={recap} />
             </div>
             <p className="text-xs text-zinc-500">
-              Link rekap bersifat rahasia: berikan hanya kepada pasangan pengantin. Draft hanya bisa dibuka saat Anda login.
+              Link rekap bersifat rahasia: berikan hanya kepada pasangan pengantin. Draft hanya bisa dibuka saat Anda
+              login.
             </p>
           </div>
         </section>

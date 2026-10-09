@@ -20,6 +20,4 @@ export const config: ThemeConfig = {
   coverExit: "fade",
   radius: "0.25rem",
   ambient: "sparkles",
-  animation: { reveal: true },
-  defaultSections: ["cover", "pembuka", "mempelai", "countdown", "acara", "galeri", "rsvp", "ucapan", "amplop", "penutup"],
 };

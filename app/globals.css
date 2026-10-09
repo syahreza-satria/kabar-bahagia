@@ -50,7 +50,9 @@ body {
   font-size: 0.875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: opacity 0.2s, background-color 0.2s;
+  transition:
+    opacity 0.2s,
+    background-color 0.2s;
 }
 .inv-btn-solid {
   background: var(--inv-primary);
@@ -261,30 +263,41 @@ body {
   }
 }
 .inv-neon-grid {
-  background-image: linear-gradient(var(--inv-primary) 1px, transparent 1px), linear-gradient(90deg, var(--inv-primary) 1px, transparent 1px);
+  background-image:
+    linear-gradient(var(--inv-primary) 1px, transparent 1px),
+    linear-gradient(90deg, var(--inv-primary) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: inv-grid 2.5s linear infinite;
   mask-image: linear-gradient(to top, #000, transparent 85%);
 }
 @keyframes inv-glitch {
-  0%, 92%, 100% {
+  0%,
+  92%,
+  100% {
     transform: translate(0);
-    text-shadow: 0 0 12px var(--inv-primary), 0 0 32px var(--inv-primary);
+    text-shadow:
+      0 0 12px var(--inv-primary),
+      0 0 32px var(--inv-primary);
   }
   94% {
     transform: translate(-3px, 1px);
-    text-shadow: 3px 0 #00e5ff, -3px 0 var(--inv-primary);
+    text-shadow:
+      3px 0 #00e5ff,
+      -3px 0 var(--inv-primary);
   }
   96% {
     transform: translate(3px, -1px);
-    text-shadow: -3px 0 #00e5ff, 3px 0 var(--inv-primary);
+    text-shadow:
+      -3px 0 #00e5ff,
+      3px 0 var(--inv-primary);
   }
 }
 .inv-glitch {
   animation: inv-glitch 4s infinite;
 }
 @keyframes inv-sway {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(-1.2deg);
   }
   50% {

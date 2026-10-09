@@ -1,7 +1,7 @@
-import { CoverScene } from "@/components/invitation/CoverScene";
+import { CoverScene } from "@/components/invitation/scene/CoverScene";
 import { OpenButton } from "@/components/invitation/InvitationShell";
-import { SplitText } from "@/components/invitation/SplitText";
-import { formatDateLong } from "@/lib/utils";
+import { SplitText } from "@/components/invitation/effects/SplitText";
+import { formatDateLong } from "@/lib/dates";
 import type { SectionProps } from "../types";
 import { Mandala } from "./Mandala";
 
@@ -24,7 +24,11 @@ export function Cover({ data, guestSlot }: SectionProps) {
             <span className="block text-2xl text-[#d4a84a]">&amp;</span>
             <SplitText text={bride.nickname} className="block" delay={0.7} />
           </h1>
-          {main && <p className="mt-3 text-xs uppercase tracking-[0.25em] text-[#f6e3b4]/80">{formatDateLong(main.startsAt, main.timezone)}</p>}
+          {main && (
+            <p className="mt-3 text-xs uppercase tracking-[0.25em] text-[#f6e3b4]/80">
+              {formatDateLong(main.startsAt, main.timezone)}
+            </p>
+          )}
         </div>
       </div>
 
