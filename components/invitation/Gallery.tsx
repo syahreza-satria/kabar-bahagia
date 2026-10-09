@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 import type { MediaData } from "@/types/invitation";
 
 /** Galeri foto dengan lightbox. Gambar di-lazy-load oleh next/image. */
-export function Gallery({ photos }: { photos: MediaData[] }) {
+export type GalleryVariant = "grid" | "polaroid" | "filmstrip" | "masonry";
+
+export function Gallery({ photos, variant = "grid" }: { photos: MediaData[]; variant?: GalleryVariant }) {
   const [index, setIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -22,6 +24,62 @@ export function Gallery({ photos }: { photos: MediaData[] }) {
 
   return (
     <>
+      {variant === "polaroid" && (
+        <div className="grid grid-cols-2 gap-x-3 gap-y-6 px-1 pt-2">
+          {photos.map((p, i) => (
+            <motion.button
+              key={p.id}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Perbesar foto ${i + 1}`}
+              style={{ rotate: ((i * 37) % 11) - 5 }}
+              whileHover={{ rotate: 0, scale: 1.06, zIndex: 5 }}
+              whileTap={{ scale: 0.97 }}
+              className="relative bg-white p-2 pb-8 text-left shadow-lg"
+            >
+              <span aria-hidden className="absolute -top-2 left-1/2 h-4 w-12 -translate-x-1/2 rotate-2 bg-inv-primary/30" />
+              <span className="relative block aspect-square overflow-hidden bg-inv-line">
+                <Image src={p.url} alt={`Foto galeri ${i + 1}`} fill sizes="200px" className="object-cover" loading="lazy" />
+              </span>
+              <span className="absolute inset-x-0 bottom-1.5 text-center font-display text-sm text-neutral-600">#{i + 1}</span>
+            </motion.button>
+          ))}
+        </div>
+      )}
+
+      {variant === "filmstrip" && (
+        <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 [scrollbar-width:none]">
+          {photos.map((p, i) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Perbesar foto ${i + 1}`}
+              className="relative aspect-[3/4] w-[70%] shrink-0 snap-center overflow-hidden rounded-[var(--inv-radius,0.5rem)] bg-inv-line"
+            >
+              <Image src={p.url} alt={`Foto galeri ${i + 1}`} fill sizes="340px" className="object-cover" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {variant === "masonry" && (
+        <div className="columns-2 gap-2">
+          {photos.map((p, i) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Perbesar foto ${i + 1}`}
+              className={`relative mb-2 block w-full overflow-hidden rounded-[var(--inv-radius,0.5rem)] bg-inv-line ${i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-square" : "aspect-[4/5]"}`}
+            >
+              <Image src={p.url} alt={`Foto galeri ${i + 1}`} fill sizes="240px" className="object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {variant === "grid" && (
       <div className="grid grid-cols-2 gap-2">
         {photos.map((p, i) => (
           <button
@@ -42,6 +100,7 @@ export function Gallery({ photos }: { photos: MediaData[] }) {
           </button>
         ))}
       </div>
+      )}
 
       {index !== null && (
         <div

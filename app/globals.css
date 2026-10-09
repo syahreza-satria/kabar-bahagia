@@ -171,6 +171,23 @@ body {
   height: auto !important;
   font-size: 13px;
 }
+.inv-particle-bubbles {
+  background: transparent;
+  border: 1.5px solid var(--inv-primary);
+  border-radius: 9999px;
+  opacity: 0.4;
+  top: auto;
+  bottom: -6%;
+  animation-name: inv-rise;
+}
+@keyframes inv-rise {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(var(--sway, 0px), -112vh, 0);
+  }
+}
 @keyframes inv-fall {
   from {
     transform: translate3d(0, -10vh, 0) rotate(0deg);
@@ -221,4 +238,66 @@ body {
   background-clip: text;
   color: transparent;
   animation: inv-shimmer 6s linear infinite;
+}
+
+/* ---------- Efek khusus tema ---------- */
+@keyframes inv-wave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.inv-wave {
+  animation: inv-wave 9s linear infinite;
+}
+@keyframes inv-grid {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 60px;
+  }
+}
+.inv-neon-grid {
+  background-image: linear-gradient(var(--inv-primary) 1px, transparent 1px), linear-gradient(90deg, var(--inv-primary) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: inv-grid 2.5s linear infinite;
+  mask-image: linear-gradient(to top, #000, transparent 85%);
+}
+@keyframes inv-glitch {
+  0%, 92%, 100% {
+    transform: translate(0);
+    text-shadow: 0 0 12px var(--inv-primary), 0 0 32px var(--inv-primary);
+  }
+  94% {
+    transform: translate(-3px, 1px);
+    text-shadow: 3px 0 #00e5ff, -3px 0 var(--inv-primary);
+  }
+  96% {
+    transform: translate(3px, -1px);
+    text-shadow: -3px 0 #00e5ff, 3px 0 var(--inv-primary);
+  }
+}
+.inv-glitch {
+  animation: inv-glitch 4s infinite;
+}
+@keyframes inv-sway {
+  0%, 100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+.inv-sway {
+  animation: inv-sway 6s ease-in-out infinite;
+  transform-origin: top center;
+}
+.inv-paper {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .4  0 0 0 0 .3  0 0 0 0 .2  0 0 0 .08 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+}
+.inv-batik {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><g fill='none' stroke='%23b8893a' stroke-opacity='.22' stroke-width='1'><circle cx='30' cy='30' r='12'/><circle cx='30' cy='30' r='5'/><path d='M0 30h18M42 30h18M30 0v18M30 42v18'/><circle cx='0' cy='0' r='8'/><circle cx='60' cy='0' r='8'/><circle cx='0' cy='60' r='8'/><circle cx='60' cy='60' r='8'/></g></svg>");
 }

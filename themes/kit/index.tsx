@@ -2,10 +2,10 @@ import Image from "next/image";
 import type { ComponentType, ReactNode } from "react";
 import { Suspense } from "react";
 import { Countdown } from "@/components/invitation/Countdown";
-import { Gallery } from "@/components/invitation/Gallery";
+import { Gallery, type GalleryVariant } from "@/components/invitation/Gallery";
 import { GiftCards } from "@/components/invitation/GiftCards";
 import { ParallaxBand } from "@/components/invitation/ParallaxBand";
-import { Reveal } from "@/components/invitation/Reveal";
+import { Reveal, type RevealVariant } from "@/components/invitation/Reveal";
 import { RsvpForm } from "@/components/invitation/RsvpForm";
 import { Tilt } from "@/components/invitation/Tilt";
 import { WishesBoard } from "@/components/invitation/WishesBoard";
@@ -22,6 +22,19 @@ export type ThemeKit = {
   Cover: ComponentType<SectionProps>;
   /** Bentuk bingkai foto mempelai. */
   photoShape: "arch" | "circle" | "oval" | "square";
+  /** Gaya animasi muncul untuk kartu & foto (default "slide"). */
+  motion?: "slide" | "rise" | "zoom" | "flip" | "rotate" | "drop";
+  /** Tata letak galeri (default "grid"). */
+  gallery?: GalleryVariant;
+};
+
+const MOTION: Record<NonNullable<ThemeKit["motion"]>, [RevealVariant, RevealVariant]> = {
+  slide: ["left", "right"],
+  rise: ["up", "up"],
+  zoom: ["zoom", "zoom"],
+  flip: ["flip", "flip"],
+  rotate: ["rotate", "rotate"],
+  drop: ["drop", "drop"],
 };
 
 const SHAPE: Record<ThemeKit["photoShape"], string> = {
@@ -36,10 +49,14 @@ const SHAPE: Record<ThemeKit["photoShape"], string> = {
  * menyediakan konfigurasi, Section wrapper, dan Cover. Komponen interaktif (RSVP, ucapan,
  * amplop) dipakai bersama dan hanya diberi gaya lewat variabel --inv-*.
  */
-export function createSections(kit: ThemeKit): Record<SectionCode, ComponentType<SectionProps>> {
+export function createSections(
+  kit: ThemeKit,
+  overrides: Partial<Record<SectionCode, ComponentType<SectionProps>>> = {},
+): Record<SectionCode, ComponentType<SectionProps>> {
   const { Section } = kit;
+  const [motionA, motionB] = MOTION[kit.motion ?? "slide"];
 
-  function Person({ p, label, side }: { p: InvitationContent["bride"]; label: string; side: "left" | "right" }) {
+  function Person({ p, label, side }: { p: InvitationContent["bride"]; label: string; side: RevealVariant }) {
     const handle = p.instagram.replace(/^@/, "");
     return (
       <Reveal variant={side} className="flex flex-col items-center">
@@ -92,9 +109,9 @@ export function createSections(kit: ThemeKit): Record<SectionCode, ComponentType
     return (
       <Section title="Mempelai" eyebrow="Dengan memohon rahmat Allah">
         <div className="space-y-10">
-          <Person p={groom} label="Mempelai Pria" side="left" />
+          <Person p={groom} label="Mempelai Pria" side={motionA} />
           <p className="font-display text-4xl italic text-inv-primary">&amp;</p>
-          <Person p={bride} label="Mempelai Wanita" side="right" />
+          <Person p={bride} label="Mempelai Wanita" side={motionB} />
         </div>
       </Section>
     );
@@ -116,7 +133,7 @@ export function createSections(kit: ThemeKit): Record<SectionCode, ComponentType
       <Section title="Rangkaian Acara">
         <div className="space-y-6">
           {data.events.map((e, i) => (
-            <Reveal key={e.id} variant={i % 2 ? "right" : "left"}>
+            <Reveal key={e.id} variant={i % 2 ? motionB : motionA}>
               <article className="inv-card p-6">
                 <h3 className="font-display text-3xl text-inv-primary">{e.name}</h3>
                 <p className="mt-3 text-inv-ink">{formatDateLong(e.startsAt, e.timezone)}</p>
@@ -157,7 +174,7 @@ export function createSections(kit: ThemeKit): Record<SectionCode, ComponentType
             <iframe src={`https://www.youtube-nocookie.com/embed/${yt}`} title="Video prewedding" loading="lazy" allowFullScreen className="h-full w-full" />
           </div>
         )}
-        <Gallery photos={photos} />
+        <Gallery photos={photos} variant={kit.gallery} />
       </Section>
     );
   };
@@ -236,7 +253,7 @@ export function createSections(kit: ThemeKit): Record<SectionCode, ComponentType
     );
   };
 
-  return {
+  const base = {
     cover: kit.Cover,
     pembuka: Pembuka,
     mempelai: Mempelai,
@@ -250,4 +267,5 @@ export function createSections(kit: ThemeKit): Record<SectionCode, ComponentType
     live: Live,
     penutup: Penutup,
   };
+  return { ...base, ...overrides };
 }

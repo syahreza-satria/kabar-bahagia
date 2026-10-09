@@ -8,6 +8,22 @@ import { ScrollFx } from "./ScrollFx";
 type ShellContext = { open: () => void };
 const Ctx = createContext<ShellContext>({ open: () => {} });
 
+export type CoverExit = "slideUp" | "fade" | "zoom" | "iris" | "slideLeft";
+
+/** Animasi keluar cover per gaya; dipilih tema lewat config.coverExit. */
+const EXIT_VARIANTS: Record<CoverExit, { exit: Record<string, string | number>; duration: number }> = {
+  slideUp: { exit: { y: "-100%" }, duration: 0.9 },
+  fade: { exit: { opacity: 0 }, duration: 0.8 },
+  zoom: { exit: { scale: 1.6, opacity: 0 }, duration: 0.9 },
+  iris: { exit: { clipPath: "circle(0% at 50% 50%)" }, duration: 1 },
+  slideLeft: { exit: { x: "-100%" }, duration: 0.9 },
+};
+
+/** Untuk cover interaktif yang menjalankan animasinya sendiri sebelum membuka undangan. */
+export function useShellOpen() {
+  return useContext(Ctx).open;
+}
+
 /** Tombol "Buka Undangan" yang dipakai komponen Cover tema. */
 export function OpenButton({ children, className }: { children: ReactNode; className?: string }) {
   const { open } = useContext(Ctx);
@@ -100,6 +116,7 @@ export function InvitationShell({
   className,
   ambient,
   nav,
+  exit = "slideUp",
 }: {
   cover: ReactNode;
   children: ReactNode;
@@ -108,6 +125,7 @@ export function InvitationShell({
   className: string;
   ambient: AmbientKind | null;
   nav: NavItem[];
+  exit?: CoverExit;
 }) {
   const [opened, setOpened] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -157,8 +175,9 @@ export function InvitationShell({
               <motion.div
                 key="cover"
                 className="fixed inset-0 z-50 mx-auto w-full max-w-[480px] overflow-y-auto bg-inv-bg"
-                exit={reduce ? { opacity: 0 } : { y: "-100%" }}
-                transition={{ duration: reduce ? 0.01 : 0.9, ease: [0.76, 0, 0.24, 1] }}
+                style={exit === "iris" ? { clipPath: "circle(150% at 50% 50%)" } : undefined}
+                exit={reduce ? { opacity: 0 } : EXIT_VARIANTS[exit].exit}
+                transition={{ duration: reduce ? 0.01 : EXIT_VARIANTS[exit].duration, ease: [0.76, 0, 0.24, 1] }}
               >
                 {cover}
               </motion.div>

@@ -16,6 +16,7 @@ export const config: ThemeConfig = {
   },
   fontClassName: `${display.variable} ${body.variable} ${script.variable} font-body`,
   ornaments: { divider: "❧" },
+  coverExit: "slideUp",
   radius: "1.25rem",
   ambient: "petals",
   animation: { reveal: true },

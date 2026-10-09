@@ -1,6 +1,6 @@
 "use client";
 
-export type AmbientKind = "petals" | "hearts" | "sparkles";
+export type AmbientKind = "petals" | "hearts" | "sparkles" | "bubbles";
 
 // Pseudo-acak deterministik supaya HTML server dan client identik (tanpa hydration mismatch).
 function rand(i: number, salt: number) {

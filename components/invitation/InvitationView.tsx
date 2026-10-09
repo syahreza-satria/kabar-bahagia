@@ -59,6 +59,7 @@ export function InvitationView({
     "--inv-line": colors.line,
     "--inv-on-primary": colors.onPrimary ?? "#ffffff",
     "--inv-radius": theme.config.radius,
+    "--inv-scene": colors.scene ?? data.primaryColor ?? colors.primary,
   } as CSSProperties;
 
   const Cover = theme.sections.cover;
@@ -70,6 +71,7 @@ export function InvitationView({
       themeVars={themeVars}
       musicUrl={data.musicUrl}
       ambient={theme.config.ambient}
+      exit={theme.config.coverExit}
       nav={body
         .filter((s) => !["pembuka", "countdown", "penutup"].includes(s.code))
         .map((s) => ({ code: s.code, label: SECTION_LABELS[s.code] }))}

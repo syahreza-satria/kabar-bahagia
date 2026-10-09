@@ -18,7 +18,7 @@ Paket, harga, dan pembayaran diurus admin **di luar aplikasi**. Aplikasi hanya u
 | ----------------- | ------------------------------------------------------------------ |
 | Model bisnis      | Jasa (admin yang input data)                                       |
 | Jenis acara       | Pernikahan saja                                                    |
-| Tema awal         | Elegan Minimalis (satu tema di MVP)                                |
+| Tema              | 11 tema: Elegan Minimalis, Rustic Floral, Midnight Gold, Pastel Romantis, Amplop Klasik, Tirai Teater, Pantai Senja, Nusantara Klasik, Neon Night, Polaroid Memories, Sakura Zen (demo di `/demo`) |
 | Bahasa            | Bahasa Indonesia saja (UI dan konten)                              |
 | Pengirim WhatsApp | Klien, lewat halaman rekap, memakai link `wa.me`                   |
 | Masa aktif        | 2 minggu setelah acara terakhir, lalu diarsipkan dan media dihapus |

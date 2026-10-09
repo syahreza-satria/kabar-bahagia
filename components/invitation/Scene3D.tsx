@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export type SceneKind = "rings" | "hearts" | "petals" | "stars";
+export type SceneKind = "rings" | "hearts" | "petals" | "stars" | "wire" | "bubbles";
 
 /**
  * Adegan Three.js untuk cover: cincin emas, hati, atau kelopak 3D yang bereaksi pada
@@ -28,7 +28,7 @@ export default function Scene3D({ kind }: { kind: SceneKind }) {
       }
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      const primary = new THREE.Color(getComputedStyle(canvas).getPropertyValue("--inv-primary").trim() || "#c9a45c");
+      const primary = new THREE.Color((getComputedStyle(canvas).getPropertyValue("--inv-scene").trim() || getComputedStyle(canvas).getPropertyValue("--inv-primary").trim()) || "#c9a45c");
       const light = primary.clone().lerp(new THREE.Color("#ffffff"), 0.55);
 
       const scene = new THREE.Scene();
@@ -61,6 +61,11 @@ export default function Scene3D({ kind }: { kind: SceneKind }) {
       const metal = track(new THREE.MeshStandardMaterial({ color: primary, metalness: 1, roughness: 0.28, envMapIntensity: 1.3 }));
       const soft = track(new THREE.MeshStandardMaterial({ color: light, metalness: 0.2, roughness: 0.55, side: THREE.DoubleSide }));
 
+      const wireMat = track(new THREE.MeshBasicMaterial({ color: primary, wireframe: true, transparent: true, opacity: 0.5 }));
+      const bubbleMat = track(
+        new THREE.MeshPhysicalMaterial({ color: light, metalness: 0, roughness: 0.05, transmission: 0.9, thickness: 0.6, transparent: true, opacity: 0.55 }),
+      );
+
       type Floater = { mesh: InstanceType<typeof THREE.Mesh>; speed: number; spin: number; phase: number; drift: number };
       const floaters: Floater[] = [];
 
@@ -77,7 +82,7 @@ export default function Scene3D({ kind }: { kind: SceneKind }) {
         group.position.y = 3.2;
       }
 
-      const count = kind === "rings" ? 16 : kind === "hearts" ? 18 : kind === "stars" ? 90 : 30;
+      const count = kind === "rings" ? 16 : kind === "hearts" ? 18 : kind === "stars" ? 90 : kind === "wire" ? 14 : kind === "bubbles" ? 26 : 30;
       let geo: InstanceType<typeof THREE.BufferGeometry>;
       if (kind === "hearts") {
         const s = new THREE.Shape();
@@ -90,6 +95,10 @@ export default function Scene3D({ kind }: { kind: SceneKind }) {
         s.bezierCurveTo(0.35, 0, 0.25, 0.25, 0.25, 0.25);
         geo = new THREE.ExtrudeGeometry(s, { depth: 0.25, bevelEnabled: true, bevelSize: 0.06, bevelThickness: 0.06, bevelSegments: 3 });
         geo.center();
+      } else if (kind === "wire") {
+        geo = new THREE.IcosahedronGeometry(0.7, 1);
+      } else if (kind === "bubbles") {
+        geo = new THREE.SphereGeometry(0.4, 24, 16);
       } else if (kind === "petals") {
         geo = new THREE.SphereGeometry(0.5, 20, 12);
         geo.scale(0.8, 0.08, 1.2);
@@ -99,10 +108,15 @@ export default function Scene3D({ kind }: { kind: SceneKind }) {
       track(geo);
 
       for (let i = 0; i < count; i++) {
-        const mesh = new THREE.Mesh(geo as unknown as ConstructorParameters<typeof THREE.Mesh>[0], kind === "rings" ? (i % 3 ? metal : soft) : i % 3 ? soft : metal);
+        const mat = kind === "wire" ? wireMat : kind === "bubbles" ? bubbleMat : kind === "rings" ? (i % 3 ? metal : soft) : i % 3 ? soft : metal;
+        const mesh = new THREE.Mesh(geo as unknown as ConstructorParameters<typeof THREE.Mesh>[0], mat);
         const scale = kind === "stars" ? 0.3 + Math.random() * 0.9 : kind === "rings" ? 0.5 + Math.random() * 1.1 : 0.5 + Math.random() * 0.9;
         mesh.scale.setScalar(scale);
         mesh.position.set((Math.random() - 0.5) * 12, (Math.random() - 0.5) * 18, (Math.random() - 0.5) * 8 - 1);
+        if (kind === "wire") {
+          mesh.scale.setScalar(0.45 + Math.random() * 0.6);
+          mesh.position.x = (i % 2 ? 1 : -1) * (3.6 + Math.random() * 2.8);
+        }
         mesh.rotation.set(Math.random() * 6, Math.random() * 6, Math.random() * 6);
         scene.add(mesh);
         floaters.push({
@@ -156,7 +170,11 @@ export default function Scene3D({ kind }: { kind: SceneKind }) {
 
         for (const f of floaters) {
           const m = f.mesh;
-          if (kind === "petals") {
+          if (kind === "bubbles") {
+            m.position.y += f.speed * dt * 1.6;
+            m.position.x += Math.sin(t * f.drift + f.phase) * dt * 0.5;
+            if (m.position.y > 9) m.position.y = -9;
+          } else if (kind === "petals") {
             m.position.y -= f.speed * dt * 2.2;
             m.position.x += Math.sin(t * f.drift + f.phase) * dt * 0.8;
             if (m.position.y < -9) m.position.y = 9;
