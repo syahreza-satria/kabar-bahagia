@@ -20,6 +20,9 @@ export function OpenButton({ children, className }: { children: ReactNode; class
 
 export type NavItem = { code: string; label: string };
 
+/** Label ringkas supaya dock muat di layar sempit. */
+const SHORT_LABEL: Record<string, string> = { lovestory: "Cerita", amplop: "Amplop", live: "Live", mempelai: "Mempelai" };
+
 /** Progress bar tipis di atas layar yang mengikuti scroll. */
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
@@ -36,6 +39,15 @@ function ScrollProgress() {
 /** Dock navigasi di bawah: lompat ke section dan menandai section yang sedang terlihat. */
 function SectionDock({ items }: { items: NavItem[] }) {
   const [active, setActive] = useState<string | null>(null);
+  const barRef = useRef<HTMLElement>(null);
+
+  // jaga item aktif tetap terlihat di tengah dock (tanpa menggulir halaman)
+  useEffect(() => {
+    const bar = barRef.current;
+    const btn = active ? bar?.querySelector<HTMLElement>(`[data-code="${active}"]`) : null;
+    if (!bar || !btn) return;
+    bar.scrollTo({ left: btn.offsetLeft - (bar.clientWidth - btn.clientWidth) / 2, behavior: "smooth" });
+  }, [active]);
 
   useEffect(() => {
     const els = items.map((i) => document.getElementById(`sec-${i.code}`)).filter((e): e is HTMLElement => !!e);
@@ -52,26 +64,28 @@ function SectionDock({ items }: { items: NavItem[] }) {
   if (items.length < 2) return null;
   return (
     <motion.nav
+      ref={barRef}
       aria-label="Navigasi section"
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.9, type: "spring", stiffness: 140, damping: 18 }}
-      className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(min(480px,100vw)-1.5rem)] -translate-x-1/2 gap-1 overflow-x-auto rounded-full border border-inv-line bg-inv-surface/90 p-1 shadow-lg backdrop-blur [scrollbar-width:none]"
+      className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(min(480px,100vw)-1.5rem)] -translate-x-1/2 gap-1 overflow-x-auto rounded-full border border-inv-line bg-inv-surface/95 p-1 shadow-lg backdrop-blur [scrollbar-width:none] [mask-image:linear-gradient(to_right,transparent,#000_14px,#000_calc(100%-14px),transparent)]"
     >
       {items.map((i) => (
         <button
           key={i.code}
+          data-code={i.code}
           type="button"
           onClick={() => document.getElementById(`sec-${i.code}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
           aria-current={active === i.code ? "true" : undefined}
-          className={`relative min-h-11 shrink-0 rounded-full px-3 text-xs transition-colors ${
+          className={`relative min-h-11 shrink-0 rounded-full px-3.5 text-xs transition-colors ${
             active === i.code ? "text-inv-on-primary" : "text-inv-muted hover:text-inv-ink"
           }`}
         >
           {active === i.code && (
             <motion.span layoutId="dock-pill" className="absolute inset-0 rounded-full bg-inv-primary" transition={{ type: "spring", stiffness: 300, damping: 28 }} />
           )}
-          <span className="relative">{i.label}</span>
+          <span className="relative">{SHORT_LABEL[i.code] ?? i.label}</span>
         </button>
       ))}
     </motion.nav>
@@ -134,7 +148,7 @@ export function InvitationShell({
         <div className="relative mx-auto min-h-dvh w-full max-w-[480px] overflow-x-clip bg-inv-bg text-inv-ink shadow-xl">
           {musicUrl && <audio ref={audioRef} src={musicUrl} loop preload="none" />}
 
-          <div className={opened ? "" : "h-dvh overflow-hidden"} aria-hidden={!opened} inert={!opened}>
+          <div className={opened ? "pb-24" : "h-dvh overflow-hidden"} aria-hidden={!opened} inert={!opened}>
             {children}
           </div>
 
