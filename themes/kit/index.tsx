@@ -150,10 +150,10 @@ export function createSections(
                     </a>
                   )}
                   <a href={googleCalendarUrl(e, title)} target="_blank" rel="noopener noreferrer" className="inv-btn inv-btn-outline !text-xs">
-                    + Kalender
+                    Google Kalender
                   </a>
-                  <a href={icsDataUrl(e, title)} download={`${e.name}.ics`} className="inv-btn inv-btn-outline !text-xs">
-                    File .ics
+                  <a href={icsDataUrl(e, title)} download={`${e.name}.ics`} aria-label={`Simpan ${e.name} ke kalender di HP`} className="inv-btn inv-btn-outline !text-xs">
+                    Kalender HP / iPhone
                   </a>
                 </div>
               </article>
