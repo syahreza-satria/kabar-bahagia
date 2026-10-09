@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Tirai Teater",
   description: "Tirai beludru merah terbuka lebar, pertunjukan cinta dimulai.",
   previewImage: "/themes/tirai-teater.svg",
+  tags: ["Gelap", "Interaktif", "3D"],
   colors: {
     bg: "#1b0a0d",
     surface: "#2a1015",

@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Pantai Senja",
   description: "Matahari terbenam, ombak bergerak, gelembung laut 3D.",
   previewImage: "/themes/pantai-senja.svg",
+  tags: ["Terang", "3D"],
   colors: {
     bg: "#fff6e9",
     surface: "#ffffff",

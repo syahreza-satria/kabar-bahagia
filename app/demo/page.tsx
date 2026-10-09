@@ -1,47 +1,58 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { ThemeGallery } from "@/components/invitation/ThemeGallery";
 import { themeList } from "@/themes/registry";
 
 export const metadata: Metadata = {
-  title: "Demo Tema",
+  title: "Demo Tema Undangan",
   robots: { index: false, follow: false },
 };
 
+const STEPS = [
+  ["1", "Pilih tema", "Filter berdasarkan suasana atau efek."],
+  ["2", "Tekan Buka Undangan", "Setiap tema punya cara membuka yang berbeda."],
+  ["3", "Coba semua fitur", "Scroll, RSVP (ada konfeti!), ucapan, galeri."],
+] as const;
+
 export default function DemoIndex() {
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-12">
-      <h1 className="text-3xl font-semibold tracking-tight">Demo Tema Undangan</h1>
-      <p className="mt-2 max-w-xl text-neutral-600">
-        Buka tema di HP atau desktop. Tekan <strong>Buka Undangan</strong>, lalu coba scroll, isi RSVP (konfeti!), tulis
-        ucapan, dan buka galeri. Data di halaman ini hanya contoh dan tidak disimpan.
-      </p>
-      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {themeList.map((t, i) => (
-          <li key={t.id} className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
-            <div className="relative aspect-[3/4] bg-neutral-100">
-              <Image
-                src={t.previewImage}
-                alt={`Pratinjau tema ${t.name}`}
-                fill
-                sizes="(max-width: 640px) 100vw, 25vw"
-                loading={i < 4 ? "eager" : "lazy"}
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <h2 className="font-semibold">{t.name}</h2>
-              <p className="mt-1 text-sm text-neutral-600">{t.description}</p>
-              <Link
-                href={`/preview/${t.id}`}
-                className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-neutral-900 px-4 text-sm font-medium text-white hover:bg-neutral-700"
-              >
-                Lihat demo
-              </Link>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </main>
+    <div className="min-h-dvh bg-neutral-50 text-neutral-900">
+      <header className="border-b border-neutral-200 bg-white">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          <Link href="/" className="inline-flex min-h-11 items-center font-semibold tracking-tight">
+            KabarBahagia
+          </Link>
+          <span className="text-xs text-neutral-500 sm:text-sm">Demo tema</span>
+        </div>
+      </header>
+
+      <main className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pt-12 lg:px-8">
+        <section className="max-w-3xl">
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">Demo Tema Undangan</h1>
+          <p className="mt-3 text-base text-neutral-600 sm:text-lg">
+            {themeList.length} tema siap pakai. Buka di HP atau komputer dan rasakan sendiri. Data di halaman demo hanya
+            contoh dan tidak disimpan.
+          </p>
+        </section>
+
+        <ol className="mt-6 grid gap-3 sm:mt-8 sm:grid-cols-3">
+          {STEPS.map(([n, title, text]) => (
+            <li key={n} className="flex gap-3 rounded-xl bg-white p-3 ring-1 ring-neutral-200 sm:p-4">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-semibold text-white">
+                {n}
+              </span>
+              <div>
+                <p className="text-sm font-semibold">{title}</p>
+                <p className="text-xs text-neutral-600 sm:text-sm">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <section className="mt-8 sm:mt-10" aria-label="Daftar tema">
+          <ThemeGallery themes={themeList} />
+        </section>
+      </main>
+    </div>
   );
 }

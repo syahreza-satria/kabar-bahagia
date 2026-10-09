@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Nusantara Klasik",
   description: "Motif batik emas dan mandala berputar di atas marun tradisional.",
   previewImage: "/themes/nusantara-klasik.svg",
+  tags: ["Gelap", "3D"],
   colors: {
     bg: "#fbf3e4",
     surface: "#fffaf0",

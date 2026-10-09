@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Polaroid Memories",
   description: "Album kenangan: polaroid yang bisa diseret, tulisan tangan, kertas kraft.",
   previewImage: "/themes/polaroid-memories.svg",
+  tags: ["Terang", "Interaktif"],
   colors: {
     bg: "#efe6d6",
     surface: "#fffdf8",

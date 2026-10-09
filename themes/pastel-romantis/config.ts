@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Pastel Romantis",
   description: "Merah muda lembut, tulisan tangan, hati 3D melayang.",
   previewImage: "/themes/pastel-romantis.svg",
+  tags: ["Terang", "3D"],
   colors: {
     bg: "#fdf2f4",
     surface: "#ffffff",

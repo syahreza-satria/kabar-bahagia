@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Sakura Zen",
   description: "Minimalis ala Jepang: matahari merah, teks vertikal, kelopak sakura 3D.",
   previewImage: "/themes/sakura-zen.svg",
+  tags: ["Terang", "3D"],
   colors: {
     bg: "#faf6f2",
     surface: "#ffffff",

@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Amplop Klasik",
   description: "Ketuk segel lilin: amplop terbuka dan surat undangan terangkat.",
   previewImage: "/themes/amplop-klasik.svg",
+  tags: ["Terang", "Interaktif"],
   colors: {
     bg: "#f4ebe0",
     surface: "#fffaf3",

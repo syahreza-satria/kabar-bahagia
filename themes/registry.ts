@@ -39,4 +39,5 @@ export const themeList = ALL.map(({ config }) => ({
   name: config.name,
   description: config.description,
   previewImage: config.previewImage,
+  tags: config.tags,
 }));

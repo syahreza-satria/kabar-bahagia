@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Neon Night",
   description: "Gelap futuristik: lantai grid neon, teks glitch, bentuk wireframe 3D.",
   previewImage: "/themes/neon-night.svg",
+  tags: ["Gelap", "3D"],
   colors: {
     bg: "#0a0a14",
     surface: "#12121f",

@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Midnight Gold",
   description: "Biru malam dengan aksen emas, langit berbintang 3D.",
   previewImage: "/themes/midnight-gold.svg",
+  tags: ["Gelap", "3D"],
   colors: {
     bg: "#0f1626",
     surface: "#172036",

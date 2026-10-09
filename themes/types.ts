@@ -9,11 +9,15 @@ export type SectionProps = {
   guestSlot?: ReactNode;
 };
 
+export type ThemeTag = "Terang" | "Gelap" | "Interaktif" | "3D";
+
 export type ThemeConfig = {
   id: string;
   name: string;
   description: string;
   previewImage: string;
+  /** label untuk filter di halaman demo: "Terang" | "Gelap" | "Interaktif" | "3D" */
+  tags: ThemeTag[];
   colors: {
     bg: string;
     surface: string;

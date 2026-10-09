@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Rustic Floral",
   description: "Hijau sage hangat, dedaunan, kelopak 3D berjatuhan.",
   previewImage: "/themes/rustic-floral.svg",
+  tags: ["Terang", "3D"],
   colors: {
     bg: "#f6f3ea",
     surface: "#fffdf7",

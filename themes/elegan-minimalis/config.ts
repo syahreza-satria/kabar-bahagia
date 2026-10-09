@@ -6,6 +6,7 @@ export const config: ThemeConfig = {
   name: "Elegan Minimalis",
   description: "Krem hangat, tipografi serif klasik, ruang lega.",
   previewImage: "/themes/elegan-minimalis.svg",
+  tags: ["Terang", "3D"],
   colors: {
     bg: "#faf7f2",
     surface: "#ffffff",
