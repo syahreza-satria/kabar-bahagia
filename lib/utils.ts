@@ -23,7 +23,7 @@ export function slugify(input: string) {
 }
 
 /** Slug yang bentrok dengan rute aplikasi. */
-export const RESERVED_SLUGS = new Set(["admin", "api", "login", "r", "_next"]);
+export const RESERVED_SLUGS = new Set(["admin", "api", "login", "r", "demo", "preview", "_next"]);
 
 /** Normalisasi nomor WhatsApp ke format internasional tanpa "+" (62...). */
 export function normalizePhone(raw: string) {

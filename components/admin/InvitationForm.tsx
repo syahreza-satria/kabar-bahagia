@@ -156,6 +156,9 @@ export function InvitationForm({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={t.previewImage} alt={`Pratinjau tema ${t.name}`} className="mb-2 aspect-[3/4] w-full rounded object-cover" />
                 <strong className="block">{t.name}</strong>
+                <a href={`/preview/${t.id}`} target="_blank" rel="noopener noreferrer" className="mt-1 block underline">
+                  Lihat demo ↗
+                </a>
               </label>
             ))}
           </div>

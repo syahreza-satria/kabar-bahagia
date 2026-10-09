@@ -1,5 +1,6 @@
 import { Suspense, type CSSProperties } from "react";
 import { getGuestByCode } from "@/lib/data";
+import { SECTION_LABELS } from "@/types/invitation";
 import { getTheme } from "@/themes/registry";
 import type { InvitationData, SectionCode } from "@/types/invitation";
 import { InvitationShell } from "./InvitationShell";
@@ -32,6 +33,7 @@ async function GuestName({
   invitationId: string;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  if (invitationId === "demo") return <>Nama Tamu (demo)</>;
   const { to } = await searchParams;
   const code = typeof to === "string" ? to : "";
   const guest = code ? await getGuestByCode(invitationId, code) : null;
@@ -55,6 +57,8 @@ export function InvitationView({
     "--inv-muted": colors.muted,
     "--inv-primary": data.primaryColor ?? colors.primary,
     "--inv-line": colors.line,
+    "--inv-on-primary": colors.onPrimary ?? "#ffffff",
+    "--inv-radius": theme.config.radius,
   } as CSSProperties;
 
   const Cover = theme.sections.cover;
@@ -65,6 +69,10 @@ export function InvitationView({
       className={theme.config.fontClassName}
       themeVars={themeVars}
       musicUrl={data.musicUrl}
+      ambient={theme.config.ambient}
+      nav={body
+        .filter((s) => !["pembuka", "countdown", "penutup"].includes(s.code))
+        .map((s) => ({ code: s.code, label: SECTION_LABELS[s.code] }))}
       cover={
         <Cover
           data={data}
@@ -78,7 +86,11 @@ export function InvitationView({
     >
       {body.map(({ code }) => {
         const Section = theme.sections[code];
-        return <Section key={code} data={data} />;
+        return (
+          <div key={code} id={`sec-${code}`}>
+            <Section data={data} />
+          </div>
+        );
       })}
       {data.status === "aktif" && (
         <Suspense>

@@ -1,9 +1,12 @@
-import type { ThemeDefinition } from "./types";
 import { eleganMinimalis } from "./elegan-minimalis";
+import { midnightGold } from "./midnight-gold";
+import { pastelRomantis } from "./pastel-romantis";
+import { rusticFloral } from "./rustic-floral";
+import type { ThemeDefinition } from "./types";
 
-const themes: Record<string, ThemeDefinition> = {
-  [eleganMinimalis.config.id]: eleganMinimalis,
-};
+const themes: Record<string, ThemeDefinition> = Object.fromEntries(
+  [eleganMinimalis, rusticFloral, midnightGold, pastelRomantis].map((t) => [t.config.id, t]),
+);
 
 export const DEFAULT_THEME_ID = eleganMinimalis.config.id;
 

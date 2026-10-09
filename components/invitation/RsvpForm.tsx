@@ -2,6 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { DEMO_SLUG } from "@/lib/demo";
+import { Confetti } from "./Confetti";
 import { TurnstileWidget } from "./TurnstileWidget";
 
 type Status = "hadir" | "tidak" | "ragu";
@@ -26,9 +28,12 @@ export function RsvpForm({ slug }: { slug: string }) {
   const [token, setToken] = useState<string>();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  const [burst, setBurst] = useState(0);
+  const demo = slug === DEMO_SLUG;
   const onToken = useCallback((t: string) => setToken(t), []);
 
   useEffect(() => {
+    if (demo) return;
     let cancelled = false;
     fetch(`/api/rsvp?slug=${encodeURIComponent(slug)}&to=${encodeURIComponent(code)}`)
       .then((r) => (r.ok ? r.json() : null))
@@ -44,7 +49,7 @@ export function RsvpForm({ slug }: { slug: string }) {
     return () => {
       cancelled = true;
     };
-  }, [slug, code]);
+  }, [slug, code, demo]);
 
   const maxPax = lookup?.guest?.maxPax ?? 5;
   const knownGuest = !!lookup?.guest;
@@ -54,6 +59,13 @@ export function RsvpForm({ slug }: { slug: string }) {
     setBusy(true);
     setMessage(null);
     try {
+      if (demo) {
+        await new Promise((r) => setTimeout(r, 500));
+        setLookup((l) => ({ guest: l?.guest ?? null, rsvp: { status, jumlah } }));
+        if (status === "hadir") setBurst((b) => b + 1);
+        setMessage({ ok: true, text: "Demo: konfirmasi Anda berhasil (tidak disimpan)." });
+        return;
+      }
       const res = await fetch("/api/rsvp", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -68,6 +80,7 @@ export function RsvpForm({ slug }: { slug: string }) {
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error ?? "Gagal mengirim konfirmasi");
+      if (status === "hadir") setBurst((b) => b + 1);
       setMessage({
         ok: true,
         text: knownGuest
@@ -83,6 +96,7 @@ export function RsvpForm({ slug }: { slug: string }) {
 
   return (
     <form onSubmit={submit} className="space-y-4 text-left">
+      <Confetti burstKey={burst} />
       {knownGuest ? (
         <p className="text-center text-inv-muted">
           Atas nama <strong className="text-inv-ink">{lookup!.guest!.nama}</strong>
@@ -112,7 +126,7 @@ export function RsvpForm({ slug }: { slug: string }) {
               key={o.value}
               className={`flex min-h-11 cursor-pointer items-center justify-center rounded-lg border px-2 text-center text-sm ${
                 status === o.value
-                  ? "border-inv-primary bg-inv-primary text-white"
+                  ? "border-inv-primary bg-inv-primary text-inv-on-primary"
                   : "border-inv-line bg-inv-surface text-inv-ink"
               }`}
             >

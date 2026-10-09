@@ -1,7 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { Ambient, type AmbientKind } from "./Ambient";
+import { ScrollFx } from "./ScrollFx";
 
 type ShellContext = { open: () => void };
 const Ctx = createContext<ShellContext>({ open: () => {} });
@@ -16,18 +18,82 @@ export function OpenButton({ children, className }: { children: ReactNode; class
   );
 }
 
+export type NavItem = { code: string; label: string };
+
+/** Progress bar tipis di atas layar yang mengikuti scroll. */
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  return (
+    <motion.div
+      aria-hidden
+      className="fixed inset-x-0 top-0 z-40 mx-auto h-[3px] max-w-[480px] origin-left bg-inv-primary"
+      style={{ scaleX }}
+    />
+  );
+}
+
+/** Dock navigasi di bawah: lompat ke section dan menandai section yang sedang terlihat. */
+function SectionDock({ items }: { items: NavItem[] }) {
+  const [active, setActive] = useState<string | null>(null);
+
+  useEffect(() => {
+    const els = items.map((i) => document.getElementById(`sec-${i.code}`)).filter((e): e is HTMLElement => !!e);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setActive(e.target.id.replace("sec-", ""));
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [items]);
+
+  if (items.length < 2) return null;
+  return (
+    <motion.nav
+      aria-label="Navigasi section"
+      initial={{ y: 80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.9, type: "spring", stiffness: 140, damping: 18 }}
+      className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(min(480px,100vw)-1.5rem)] -translate-x-1/2 gap-1 overflow-x-auto rounded-full border border-inv-line bg-inv-surface/90 p-1 shadow-lg backdrop-blur [scrollbar-width:none]"
+    >
+      {items.map((i) => (
+        <button
+          key={i.code}
+          type="button"
+          onClick={() => document.getElementById(`sec-${i.code}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+          aria-current={active === i.code ? "true" : undefined}
+          className={`relative min-h-11 shrink-0 rounded-full px-3 text-xs transition-colors ${
+            active === i.code ? "text-inv-on-primary" : "text-inv-muted hover:text-inv-ink"
+          }`}
+        >
+          {active === i.code && (
+            <motion.span layoutId="dock-pill" className="absolute inset-0 rounded-full bg-inv-primary" transition={{ type: "spring", stiffness: 300, damping: 28 }} />
+          )}
+          <span className="relative">{i.label}</span>
+        </button>
+      ))}
+    </motion.nav>
+  );
+}
+
 export function InvitationShell({
   cover,
   children,
   musicUrl,
   themeVars,
   className,
+  ambient,
+  nav,
 }: {
   cover: ReactNode;
   children: ReactNode;
   musicUrl: string | null;
   themeVars: React.CSSProperties;
   className: string;
+  ambient: AmbientKind | null;
+  nav: NavItem[];
 }) {
   const [opened, setOpened] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -64,7 +130,7 @@ export function InvitationShell({
 
   return (
     <Ctx.Provider value={{ open }}>
-      <div style={themeVars} className={`${className} min-h-dvh bg-neutral-200`}>
+      <div style={themeVars} className={`${className} min-h-dvh bg-neutral-200`} data-inv-root>
         <div className="relative mx-auto min-h-dvh w-full max-w-[480px] overflow-x-clip bg-inv-bg text-inv-ink shadow-xl">
           {musicUrl && <audio ref={audioRef} src={musicUrl} loop preload="none" />}
 
@@ -85,12 +151,21 @@ export function InvitationShell({
             )}
           </AnimatePresence>
 
+          {opened && (
+            <>
+              <ScrollProgress />
+              {ambient && <Ambient kind={ambient} />}
+              <SectionDock items={nav} />
+            </>
+          )}
+          <ScrollFx active={opened} rootSelector="[data-inv-root]" />
+
           {opened && musicUrl && (
             <button
               type="button"
               onClick={toggleMusic}
               aria-label={playing ? "Jeda musik" : "Putar musik"}
-              className="fixed bottom-5 right-[max(1.25rem,calc(50%-240px+1.25rem))] z-40 flex h-12 w-12 items-center justify-center rounded-full border border-inv-primary bg-inv-surface text-inv-primary shadow-lg"
+              className="fixed right-[max(1rem,calc(50%-240px+1rem))] top-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-inv-primary bg-inv-surface text-inv-primary shadow-lg"
             >
               <span className={playing && !reduce ? "animate-spin [animation-duration:4s]" : ""} aria-hidden>
                 ♪

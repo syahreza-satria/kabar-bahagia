@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { MediaData } from "@/types/invitation";
@@ -84,9 +85,23 @@ export function Gallery({ photos }: { photos: MediaData[] }) {
               </button>
             </>
           )}
-          <div className="relative h-[80dvh] w-[92vw] max-w-[900px]" onClick={(e) => e.stopPropagation()}>
-            <Image src={photos[index].url} alt={`Foto galeri ${index + 1}`} fill sizes="92vw" className="object-contain" />
-          </div>
+          <motion.div
+            key={index}
+            className="relative h-[80dvh] w-[92vw] max-w-[900px] cursor-grab touch-pan-y"
+            onClick={(e) => e.stopPropagation()}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.6}
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -80) setIndex((index + 1) % photos.length);
+              else if (info.offset.x > 80) setIndex((index - 1 + photos.length) % photos.length);
+            }}
+          >
+            <Image src={photos[index].url} alt={`Foto galeri ${index + 1}`} fill sizes="92vw" className="pointer-events-none object-contain" />
+          </motion.div>
+          <p className="absolute bottom-4 text-xs text-white/70">Geser untuk berpindah foto · {index + 1}/{photos.length}</p>
         </div>
       )}
     </>

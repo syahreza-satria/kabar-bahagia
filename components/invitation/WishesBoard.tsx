@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { DEMO_SLUG } from "@/lib/demo";
 import { TurnstileWidget } from "./TurnstileWidget";
 
 type Wish = { id: string; nama: string; pesan: string; createdAt: string };
@@ -16,7 +17,15 @@ function timeAgo(iso: string) {
 
 export function WishesBoard({ slug }: { slug: string }) {
   const code = useSearchParams().get("to") ?? "";
-  const [wishes, setWishes] = useState<Wish[]>([]);
+  const demo = slug === DEMO_SLUG;
+  const [wishes, setWishes] = useState<Wish[]>(() =>
+    demo
+      ? [
+          { id: "d1", nama: "Keluarga Besar", pesan: "Selamat menempuh hidup baru! Semoga sakinah, mawaddah, warahmah.", createdAt: new Date(Date.now() - 3_600_000).toISOString() },
+          { id: "d2", nama: "Sahabat Kuliah", pesan: "Akhirnya sah juga! Bahagia selalu ya kalian berdua.", createdAt: new Date(Date.now() - 86_400_000).toISOString() },
+        ]
+      : [],
+  );
   const [guestName, setGuestName] = useState<string | null>(null);
   const [nama, setNama] = useState("");
   const [pesan, setPesan] = useState("");
@@ -31,6 +40,7 @@ export function WishesBoard({ slug }: { slug: string }) {
   }, [slug]);
 
   useEffect(() => {
+    if (demo) return;
     fetch(`/api/wishes?slug=${encodeURIComponent(slug)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => d && setWishes(d.wishes))
@@ -41,13 +51,18 @@ export function WishesBoard({ slug }: { slug: string }) {
         .then((d) => setGuestName(d?.guest?.nama ?? null))
         .catch(() => {});
     }
-  }, [slug, code]);
+  }, [slug, code, demo]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
     try {
+      if (demo) {
+        setWishes((w) => [{ id: `d${Date.now()}`, nama: nama || "Anda", pesan, createdAt: new Date().toISOString() }, ...w]);
+        setPesan("");
+        return;
+      }
       const res = await fetch("/api/wishes", {
         method: "POST",
         headers: { "content-type": "application/json" },

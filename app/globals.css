@@ -11,6 +11,7 @@
   --inv-muted: #78736b;
   --inv-primary: #8a6f4d;
   --inv-line: #e6dfd3;
+  --inv-on-primary: #ffffff;
 }
 
 @theme inline {
@@ -25,6 +26,8 @@
   --color-inv-muted: var(--inv-muted);
   --color-inv-primary: var(--inv-primary);
   --color-inv-line: var(--inv-line);
+  --color-inv-on-primary: var(--inv-on-primary);
+  --font-script: var(--font-inv-script), cursive;
   --font-display: var(--font-inv-display), serif;
   --font-body: var(--font-inv-body), sans-serif;
 }
@@ -51,7 +54,7 @@ body {
 }
 .inv-btn-solid {
   background: var(--inv-primary);
-  color: #fff;
+  color: var(--inv-on-primary, #fff);
 }
 .inv-btn-outline {
   border: 1px solid var(--inv-primary);
@@ -133,6 +136,89 @@ body {
   * {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ---------- Efek undangan ---------- */
+.inv-card {
+  border: 1px solid var(--inv-line);
+  background: var(--inv-surface);
+  border-radius: var(--inv-radius, 0.5rem);
+}
+
+.inv-particle {
+  position: absolute;
+  top: -6%;
+  display: block;
+  color: var(--inv-primary);
+  opacity: 0.5;
+  line-height: 1;
+  animation-name: inv-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+.inv-particle-petals {
+  background: var(--inv-primary);
+  border-radius: 150% 0 150% 0;
+  opacity: 0.35;
+}
+.inv-particle-hearts,
+.inv-particle-sparkles {
+  width: auto !important;
+  height: auto !important;
+  font-size: 13px;
+}
+@keyframes inv-fall {
+  from {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(var(--sway, 0px), 112vh, 0) rotate(var(--spin, 360deg));
+  }
+}
+
+.inv-confetti {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  border-radius: 2px;
+  animation: inv-burst 1.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+@keyframes inv-burst {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), calc(var(--dy) + 320px)) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+
+.inv-kenburns {
+  animation: inv-kenburns 18s ease-in-out infinite alternate;
+}
+@keyframes inv-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes inv-shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+.inv-shimmer {
+  background: linear-gradient(90deg, var(--inv-primary), var(--inv-ink), var(--inv-primary)) 0 0 / 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: inv-shimmer 6s linear infinite;
 }
