@@ -17,10 +17,10 @@ export default function DemoIndex() {
         ucapan, dan buka galeri. Data di halaman ini hanya contoh dan tidak disimpan.
       </p>
       <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {themeList.map((t) => (
+        {themeList.map((t, i) => (
           <li key={t.id} className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
             <div className="relative aspect-[3/4] bg-neutral-100">
-              <Image src={t.previewImage} alt={`Pratinjau tema ${t.name}`} fill sizes="(max-width: 640px) 100vw, 25vw" className="object-cover" />
+              <Image src={t.previewImage} alt={`Pratinjau tema ${t.name}`} fill sizes="(max-width: 640px) 100vw, 25vw" loading={i < 4 ? "eager" : "lazy"} className="object-cover" />
             </div>
             <div className="p-4">
               <h2 className="font-semibold">{t.name}</h2>

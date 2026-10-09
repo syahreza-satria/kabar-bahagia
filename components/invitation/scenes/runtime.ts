@@ -259,6 +259,7 @@ export async function mountScene(
       }
     });
     renderer.dispose();
-    renderer.forceContextLoss(); // lepas konteks WebGL segera (browser membatasi jumlahnya)
+    // lepas konteks WebGL segera (browser membatasi jumlahnya); tidak semua perangkat mendukung ekstensinya
+    if (renderer.getContext().getExtension("WEBGL_lose_context")) renderer.forceContextLoss();
   };
 }
